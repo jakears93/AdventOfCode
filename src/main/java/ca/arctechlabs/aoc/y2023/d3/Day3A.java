@@ -33,8 +33,32 @@ public class Day3A {
                 .sum();
     }
 
-    private static List<Integer> parsePartNumbers(List<List<String>> map){
-        return new ArrayList<>();
+    private static List<String> populateAdjacent(List<List<String>> map, int mapIndex, int lineIndex){
+        List<String> adjacent = new ArrayList<>();
+
+        return adjacent;
+    }
+    private static Set<Integer> parsePartNumbers(List<List<String>> map){
+        Set<Integer> partNumbers = new HashSet<>();
+
+        for(int i=0; i<map.size(); i++){
+            List<String> line = map.get(i);
+            for(int j=0; j<line.size(); j++){
+                String entry = line.get(j);
+                try{
+                    int num = Integer.parseInt(entry);
+                    List<String> adjacent = populateAdjacent(map, i, j);
+                    for(String value : adjacent){
+                        if(value.matches("[~!@#$%^&*+-]")){
+                            partNumbers.add(num);
+                            break;
+                        }
+                    }
+                } catch (NumberFormatException ignored){}
+            }
+        }
+
+        return partNumbers;
     }
     private static List<String> translateLine(String line){
         List<String> lineValues = new ArrayList<>();
