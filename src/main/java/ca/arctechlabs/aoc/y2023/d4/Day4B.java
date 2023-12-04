@@ -1,11 +1,8 @@
 package ca.arctechlabs.aoc.y2023.d4;
 
+import ca.arctechlabs.aoc.utilities.FileLoader;
 import ca.arctechlabs.aoc.y2023.d4.model.Card;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 public class Day4B {
@@ -18,14 +15,7 @@ public class Day4B {
     }
 
     public static Integer processFile(String fileName){
-        File input = new File(fileName);
-
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
-            while(reader.ready()){
-                lines.add(reader.readLine());
-            }
-        } catch (IOException e) { e.printStackTrace(); }
+        List<String> lines = FileLoader.loadLines(fileName);
 
         List<Card> cards = lines.stream().map(Day4B::populateCard).toList();
         Map<Integer, Integer> numOfCardsMap = new HashMap<>();
@@ -35,11 +25,9 @@ public class Day4B {
 
         for(int i=0; i<cards.size(); i++){
             Card card = cards.get(i);
-            for(int j=0; j<numOfCardsMap.get(card.getId()); j++){
-                int score = calculateWin(card);
-                for(int k=1; k<=score; k++){
-                    numOfCardsMap.put(card.getId()+k, numOfCardsMap.get(card.getId()+k)+1);
-                }
+            int score = calculateWin(card);
+            for(int k=1; k<=score; k++){
+                numOfCardsMap.put(card.getId()+k, numOfCardsMap.get(card.getId()+k) + numOfCardsMap.get(card.getId()));
             }
         }
 

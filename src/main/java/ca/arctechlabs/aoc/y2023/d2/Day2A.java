@@ -1,9 +1,11 @@
 package ca.arctechlabs.aoc.y2023.d2;
 
+import ca.arctechlabs.aoc.utilities.FileLoader;
 import ca.arctechlabs.aoc.y2023.d2.model.Game;
 
-import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Day2A {
     //https://adventofcode.com/2023/day/2
@@ -31,14 +33,7 @@ public class Day2A {
     }
 
     public static Integer processFile(String fileName, Map<String, Integer> rules){
-        File input = new File(fileName);
-
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
-            while(reader.ready()){
-                lines.add(reader.readLine());
-            }
-        } catch (IOException e) { e.printStackTrace(); }
+        List<String> lines = FileLoader.loadLines(fileName);
 
         return lines.stream()
                 .map(line -> extractGame(line, rules))

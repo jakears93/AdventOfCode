@@ -1,7 +1,10 @@
 package ca.arctechlabs.aoc.y2023.d3;
 
-import java.io.*;
-import java.util.*;
+import ca.arctechlabs.aoc.utilities.FileLoader;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class Day3A {
     //https://adventofcode.com/2023/day/3
@@ -13,14 +16,7 @@ public class Day3A {
     }
 
     public static Integer processFile(String fileName){
-        File input = new File(fileName);
-
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
-            while(reader.ready()){
-                lines.add(reader.readLine());
-            }
-        } catch (IOException e) { e.printStackTrace(); }
+        List<String> lines = FileLoader.loadLines(fileName);
 
         List<char[]> map = new ArrayList<>();
 

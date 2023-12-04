@@ -1,11 +1,8 @@
 package ca.arctechlabs.aoc.y2023.d3;
 
+import ca.arctechlabs.aoc.utilities.FileLoader;
 import ca.arctechlabs.aoc.y2023.d3.model.Gear;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,14 +18,7 @@ public class Day3B {
     }
 
     public static Integer processFile(String fileName){
-        File input = new File(fileName);
-
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
-            while(reader.ready()){
-                lines.add(reader.readLine());
-            }
-        } catch (IOException e) { e.printStackTrace(); }
+        List<String> lines = FileLoader.loadLines(fileName);
 
         List<char[]> map = new ArrayList<>();
 

@@ -1,12 +1,11 @@
 package ca.arctechlabs.aoc.y2023.d4;
 
+import ca.arctechlabs.aoc.utilities.FileLoader;
 import ca.arctechlabs.aoc.y2023.d4.model.Card;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Day4A {
     //https://adventofcode.com/2023/day/4
@@ -18,14 +17,7 @@ public class Day4A {
     }
 
     public static Integer processFile(String fileName){
-        File input = new File(fileName);
-
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
-            while(reader.ready()){
-                lines.add(reader.readLine());
-            }
-        } catch (IOException e) { e.printStackTrace(); }
+        List<String> lines = FileLoader.loadLines(fileName);
 
         return lines.stream()
                 .map(Day4A::populateCard)

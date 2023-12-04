@@ -1,6 +1,7 @@
 package ca.arctechlabs.aoc.y2023.d1;
 
-import java.io.*;
+import ca.arctechlabs.aoc.utilities.FileLoader;
+
 import java.util.*;
 
 public class Day1B {
@@ -39,14 +40,7 @@ public class Day1B {
     }
 
     public static Integer processFile(String fileName, boolean enableWritten){
-        File input = new File(fileName);
-
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
-            while(reader.ready()){
-                lines.add(reader.readLine());
-            }
-        } catch (IOException e) { e.printStackTrace(); }
+        List<String> lines = FileLoader.loadLines(fileName);
 
         return lines
                 .stream()
