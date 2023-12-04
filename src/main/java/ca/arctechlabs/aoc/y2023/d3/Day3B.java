@@ -1,7 +1,7 @@
 package ca.arctechlabs.aoc.y2023.d3;
 
 import ca.arctechlabs.aoc.utilities.FileLoader;
-import ca.arctechlabs.aoc.y2023.d3.model.Gear;
+import ca.arctechlabs.aoc.y2023.models.Gear;
 
 import java.util.ArrayList;
 import java.util.Collection;

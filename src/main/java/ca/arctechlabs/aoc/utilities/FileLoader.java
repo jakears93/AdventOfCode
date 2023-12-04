@@ -8,8 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileLoader {
-    public static List<String> loadLines(String fileName){
-        File input = new File(fileName);
+    private final int year;
+    private static String BASE_PATH = "src/test/resources/%i/";
+
+    public FileLoader(int year){
+        this.year = year;
+    }
+
+    public List<String> loadLines(String fileName){
+        String path = String.format(BASE_PATH, this.year) + fileName;
+        File input = new File(path);
 
         List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(input))) {

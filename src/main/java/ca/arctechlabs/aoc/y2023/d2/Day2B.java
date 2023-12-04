@@ -1,7 +1,7 @@
 package ca.arctechlabs.aoc.y2023.d2;
 
 import ca.arctechlabs.aoc.utilities.FileLoader;
-import ca.arctechlabs.aoc.y2023.d2.model.Game;
+import ca.arctechlabs.aoc.y2023.models.Game;
 
 import java.util.HashMap;
 import java.util.List;

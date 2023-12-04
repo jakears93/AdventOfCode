@@ -1,7 +1,7 @@
 package ca.arctechlabs.aoc.y2023.d4;
 
 import ca.arctechlabs.aoc.utilities.FileLoader;
-import ca.arctechlabs.aoc.y2023.d4.model.Card;
+import ca.arctechlabs.aoc.y2023.models.Card;
 
 import java.util.*;
 

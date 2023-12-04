@@ -1,4 +1,4 @@
-package ca.arctechlabs.aoc.y2023.d3.model;
+package ca.arctechlabs.aoc.y2023.models;
 
 public class Gear {
     private int g1;

@@ -1,4 +1,4 @@
-package ca.arctechlabs.aoc.y2023.d2.model;
+package ca.arctechlabs.aoc.y2023.models;
 
 import java.util.ArrayList;
 import java.util.List;
