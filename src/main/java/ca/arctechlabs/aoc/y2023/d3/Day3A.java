@@ -60,18 +60,24 @@ public class Day3A {
                         if(value.matches("[~!@#$%^&*+/=-]")){
                             entry = peekPartNumber(line, j);
                             partNumbers.add(Integer.parseInt(entry));
-                            j += entry.length() -1;
+                            j = advanceIndex(line, j) -1;
+//                            j += entry.length() -1;
                             break;
                         }
                     }
                 } catch (NumberFormatException ignored){}
             }
         }
-        System.out.println("partNumbers.size() = " + partNumbers.size());
-        System.out.println(partNumbers);
         return partNumbers;
     }
 
+    private static int advanceIndex(char[] line, int start) {
+        int newIndex = start;
+        while(newIndex<line.length && String.valueOf(line[newIndex]).matches("[0-9]")){
+            newIndex++;
+        }
+        return newIndex;
+    }
     private static String peekPartNumber(char[] line, int startIndex){
         String entry = String.valueOf(line[startIndex]);
         //prepend
