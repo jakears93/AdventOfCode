@@ -22,69 +22,72 @@ public class Day3A {
             }
         } catch (IOException e) { e.printStackTrace(); }
 
-        List<List<String>> translatedMap = new ArrayList<>();
+        List<char[]> map = new ArrayList<>();
 
         for(String line: lines){
-            translatedMap.add(translateLine(line));
+            map.add(line.toCharArray());
         }
 
-        return parsePartNumbers(translatedMap).stream()
+        return parsePartNumbers(map).stream()
                 .mapToInt(value -> value)
                 .sum();
     }
 
-    private static List<String> populateAdjacent(List<List<String>> map, int mapIndex, int lineIndex){
+    private static List<String> populateAdjacent(List<char[]> map, int mapIndex, int lineIndex){
         List<String> adjacent = new ArrayList<>();
-
+        //j+1, j-1, i+1, i-1, i+1/j+1, i+1/j-1, i-1/j+1, i-1/j-1,
+        for(int i=-1; i<=1; i++){
+            for(int j=-1; j<=1; j++){
+                try{
+                    char[] line = map.get(mapIndex + i);
+                    String value = String.valueOf(line[lineIndex+j]);
+                    adjacent.add(value);
+                } catch (IndexOutOfBoundsException ignored) {}
+            }
+        }
         return adjacent;
     }
-    private static Set<Integer> parsePartNumbers(List<List<String>> map){
-        Set<Integer> partNumbers = new HashSet<>();
-
+    private static Collection<Integer> parsePartNumbers(List<char[]> map){
+        List<Integer> partNumbers = new ArrayList<>();
         for(int i=0; i<map.size(); i++){
-            List<String> line = map.get(i);
-            for(int j=0; j<line.size(); j++){
-                String entry = line.get(j);
+            char[] line = map.get(i);
+            for(int j=0; j<line.length; j++){
+                String entry = String.valueOf(line[j]);
                 try{
                     int num = Integer.parseInt(entry);
                     List<String> adjacent = populateAdjacent(map, i, j);
                     for(String value : adjacent){
-                        if(value.matches("[~!@#$%^&*+-]")){
-                            partNumbers.add(num);
+                        if(value.matches("[~!@#$%^&*+/=-]")){
+                            entry = peekPartNumber(line, j);
+                            partNumbers.add(Integer.parseInt(entry));
+                            j += entry.length() -1;
                             break;
                         }
                     }
                 } catch (NumberFormatException ignored){}
             }
         }
-
+        System.out.println("partNumbers.size() = " + partNumbers.size());
+        System.out.println(partNumbers);
         return partNumbers;
     }
-    private static List<String> translateLine(String line){
-        List<String> lineValues = new ArrayList<>();
-        char[] chars = line.toCharArray();
-        for(int i=0; i< chars.length; i++){
-            String entry = "";
-            String character = String.valueOf(chars[i]);
-            if(character.matches("[1-9]")){
-                entry = peekPartNumber(line.substring(i).toCharArray());
-                i += entry.length() -1;
+
+    private static String peekPartNumber(char[] line, int startIndex){
+        String entry = String.valueOf(line[startIndex]);
+        //prepend
+        for(int i=startIndex-1; i>=0; i--){
+            String character = String.valueOf(line[i]);
+            if(character.matches("[0-9]")){
+                entry = character + entry;
             }
-            else if(!character.equals(".")){
-                entry = character;
-                i += entry.length() -1;
+            else{
+                break;
             }
-            lineValues.add(entry);
         }
-
-        return lineValues;
-    }
-
-    private static String peekPartNumber(char[] partialLine){
-        String entry = String.valueOf(partialLine[0]);
-        for(int i=1; i< partialLine.length; i++){
-            String character = String.valueOf(partialLine[i]);
-            if(character.matches("[1-9]")){
+        //append
+        for(int i=startIndex+1; i<line.length; i++){
+            String character = String.valueOf(line[i]);
+            if(character.matches("[0-9]")){
                 entry = entry + character;
             }
             else{
