@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FileLoader {
     private final int year;
-    private static String BASE_PATH = "src/test/resources/%i/";
+    private static String BASE_PATH = "src/test/resources/%s/";
 
     public FileLoader(int year){
         this.year = year;

@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Day1 {
     //https://adventofcode.com/2023/day/1
-    //https://adventofcode.com/2023/day/1#part2
 
     private final Map<String, Integer> writtenNumbers;
 
@@ -32,7 +31,7 @@ public class Day1 {
         this.writtenNumbers.put("0", 0);
     }
 
-    public Integer processFile(List<String> input, boolean enableWrittenNumbers){
+    public Integer sumOfCalibrationNumbers(List<String> input, boolean enableWrittenNumbers){
         return input
                 .stream()
                 .map(line -> extractSum(line, enableWrittenNumbers))

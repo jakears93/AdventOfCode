@@ -1,6 +1,5 @@
-package ca.arctechlabs.aoc.y2023.d3;
+package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.utilities.FileLoader;
 import ca.arctechlabs.aoc.y2023.models.Gear;
 
 import java.util.ArrayList;
@@ -8,21 +7,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class Day3B {
-    //https://adventofcode.com/2023/day/3#part2
+public class Day3 {
+    //https://adventofcode.com/2023/day/3
 
-
-    public static void main(String[] args){
-        System.out.println("Test Results: " + processFile("src/main/resources/2023/Day3/B/test.txt"));
-        System.out.println("Puzzle Results: " + processFile("src/main/resources/2023/Day3/B/input.txt"));
-    }
-
-    public static Integer processFile(String fileName){
-        List<String> lines = FileLoader.loadLines(fileName);
-
+    public Integer sumOfPartNumbers(List<String> input){
         List<char[]> map = new ArrayList<>();
 
-        for(String line: lines){
+        for(String line: input){
+            map.add(line.toCharArray());
+        }
+        return parsePartNumbers(map).stream()
+                .mapToInt(value -> value)
+                .sum();
+    }
+    public Integer sumOfGearRatios(List<String> input){
+        List<char[]> map = new ArrayList<>();
+
+        for(String line: input){
             map.add(line.toCharArray());
         }
         return parseGears(map).stream()
@@ -30,7 +31,7 @@ public class Day3B {
                 .sum();
     }
 
-    private static List<String> populateAdjacent(List<char[]> map, int mapIndex, int lineIndex){
+    private List<String> populateAdjacent(List<char[]> map, int mapIndex, int lineIndex){
         List<String> adjacent = new ArrayList<>();
         //j+1, j-1, i+1, i-1, i+1/j+1, i+1/j-1, i-1/j+1, i-1/j-1,
         for(int i=-1; i<=1; i++){
@@ -45,7 +46,7 @@ public class Day3B {
         return adjacent;
     }
 
-    private static Gear checkIfGear(List<char[]> map, int mapIndex, int lineIndex){
+    private Gear checkIfGear(List<char[]> map, int mapIndex, int lineIndex){
         Gear gear = null;
         List<String> adjacentParts = new ArrayList<>();
 
@@ -86,7 +87,7 @@ public class Day3B {
         return gear;
     }
 
-    private static Collection<Gear> parseGears(List<char[]> map){
+    private Collection<Gear> parseGears(List<char[]> map){
         List<Gear> gears = new ArrayList<>();
         for(int i=0; i<map.size(); i++){
             char[] line = map.get(i);
@@ -103,17 +104,17 @@ public class Day3B {
         }
         return gears;
     }
-    private static Collection<Integer> parsePartNumbers(List<char[]> map){
+    private Collection<Integer> parsePartNumbers(List<char[]> map){
         List<Integer> partNumbers = new ArrayList<>();
         for(int i=0; i<map.size(); i++){
             char[] line = map.get(i);
             for(int j=0; j<line.length; j++){
-                String entry = String.valueOf(line[j]);
                 try{
+                    int num = Integer.parseInt(String.valueOf(line[j]));
                     List<String> adjacent = populateAdjacent(map, i, j);
                     for(String value : adjacent){
                         if(value.matches("[~!@#$%^&*+/=-]")){
-                            entry = peekPartNumber(line, j);
+                            String entry = peekPartNumber(line, j);
                             partNumbers.add(Integer.parseInt(entry));
                             j = advanceIndex(line, j) -1;
                             break;
@@ -125,14 +126,14 @@ public class Day3B {
         return partNumbers;
     }
 
-    private static int advanceIndex(char[] line, int start) {
+    private int advanceIndex(char[] line, int start) {
         int newIndex = start;
         while(newIndex<line.length && String.valueOf(line[newIndex]).matches("[0-9]")){
             newIndex++;
         }
         return newIndex;
     }
-    private static String peekPartNumber(char[] line, int startIndex){
+    private String peekPartNumber(char[] line, int startIndex){
         String entry = String.valueOf(line[startIndex]);
         //prepend
         for(int i=startIndex-1; i>=0; i--){
@@ -156,5 +157,4 @@ public class Day3B {
         }
         return entry;
     }
-
 }

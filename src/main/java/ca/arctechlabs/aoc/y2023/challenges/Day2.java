@@ -1,48 +1,30 @@
-package ca.arctechlabs.aoc.y2023.d2;
+package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.utilities.FileLoader;
 import ca.arctechlabs.aoc.y2023.models.Game;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Day2A {
+public class Day2 {
     //https://adventofcode.com/2023/day/2
 
-    private static Map<String, Integer> testRules;
-    private static Map<String, Integer> inputRules;
-
-
-    public static void main(String[] args){
-        setup();
-        System.out.println("Test Results: " + processFile("src/main/resources/2023/Day2/A/test.txt", testRules));
-        System.out.println("Puzzle Results: " + processFile("src/main/resources/2023/Day2/A/input.txt", inputRules));
-    }
-
-    public static void setup(){
-        testRules = new HashMap<>();
-        testRules.put("red", 12);
-        testRules.put("green", 13);
-        testRules.put("blue", 14);
-
-        inputRules = new HashMap<>();
-        inputRules.put("red", 12);
-        inputRules.put("green", 13);
-        inputRules.put("blue", 14);
-    }
-
-    public static Integer processFile(String fileName, Map<String, Integer> rules){
-        List<String> lines = FileLoader.loadLines(fileName);
-
-        return lines.stream()
+    public Integer countValidGames(List<String> input, Map<String, Integer> rules){
+        return input.stream()
                 .map(line -> extractGame(line, rules))
-                .filter(Day2A::validateGame)
+                .filter(this::validateGame)
                 .mapToInt(Game::getId)
                 .sum();
     }
 
-    public static boolean validateGame(Game game){
+    public Integer sumOfPowerOfSets(List<String> input){
+        return input.stream()
+                .map(line -> extractGame(line, null))
+                .mapToInt(this::getPowerOfMinimumBalls)
+                .sum();
+    }
+
+    private boolean validateGame(Game game){
         boolean valid = true;
         for(Map<String, Integer> set : game.getSets()){
             for(String key : set.keySet()){
@@ -51,7 +33,19 @@ public class Day2A {
         }
         return valid;
     }
-    public static Game extractGame(String data, Map<String, Integer> rules){
+
+    private int getPowerOfMinimumBalls(Game game){
+        int red = 0;
+        int blue = 0;
+        int green = 0;
+        for(Map<String, Integer> set : game.getSets()){
+            if(set.get("blue") != null && set.get("blue") > blue) blue = set.get("blue");
+            if(set.get("red") != null && set.get("red") > red) red = set.get("red");
+            if(set.get("green") != null && set.get("green") > green) green = set.get("green");
+        }
+        return red*green*blue;
+    }
+    private Game extractGame(String data, Map<String, Integer> rules){
         Game game = new Game();
         game.setRules(rules);
         String gameId = data.split(":")[0].split("Game ")[1];
