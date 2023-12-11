@@ -24,7 +24,7 @@ public class Day10Tests {
     public void Day10A_sample(){
         List<String> input = fileLoader.loadLines("sample10.txt");
         this.runner.populateMaze(input);
-        long result = runner.lengthOfLoop()/2;
+        long result = runner.areaInsideLoop()/2;
         assertEquals(8L, result);
     }
 
@@ -38,10 +38,18 @@ public class Day10Tests {
 
     @Test
     public void Day10B_sample(){
-        List<String> input = fileLoader.loadLines("sample10.txt");
+        List<String> input = fileLoader.loadLines("sample10B.txt");
         this.runner.populateMaze(input);
         long result = runner.areaInsideLoop();
-        assertEquals(0L, result);
+        assertEquals(4L, result);
+    }
+
+    @Test
+    public void Day10B_sample2(){
+        List<String> input = fileLoader.loadLines("sample10B_2.txt");
+        this.runner.populateMaze(input);
+        long result = runner.areaInsideLoop();
+        assertEquals(10L, result);
     }
 
     @Test
@@ -49,6 +57,6 @@ public class Day10Tests {
         List<String> input = fileLoader.loadLines("input10.txt");
         this.runner.populateMaze(input);
         long result = runner.areaInsideLoop();
-        assertEquals(0L, result);
+        assertEquals(-1L, result);
     }
 }

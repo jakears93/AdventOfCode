@@ -24,15 +24,15 @@ public class Day2Tests {
 
     @Test
     public void day2A_sample(){
-        Map<String, Integer> rules = createMockRules(12, 13, 14);
-        List<String> input = fileLoader.loadLines("sample2A.txt");
+        Map<String, Integer> rules = createRules(12, 13, 14);
+        List<String> input = fileLoader.loadLines("sample2.txt");
         int result = runner.countValidGames(input, rules);
         assertEquals(8, result);
     }
 
     @Test
     public void day2A_puzzle(){
-        Map<String, Integer> rules = createMockRules(12, 13, 14);
+        Map<String, Integer> rules = createRules(12, 13, 14);
         List<String> input = fileLoader.loadLines("input2.txt");
         int result = runner.countValidGames(input, rules);
         assertEquals(2512, result);
@@ -52,7 +52,7 @@ public class Day2Tests {
         assertEquals(67335, result);
     }
 
-    private Map<String, Integer> createMockRules(int red, int green, int blue){
+    private Map<String, Integer> createRules(int red, int green, int blue){
         Map<String, Integer> rules = new HashMap<>();
         rules.put("red", red);
         rules.put("green", green);

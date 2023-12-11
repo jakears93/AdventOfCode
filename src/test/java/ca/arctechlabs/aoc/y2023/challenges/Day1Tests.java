@@ -22,7 +22,7 @@ public class Day1Tests {
 
     @Test
     public void day1A_sample(){
-        List<String> input = fileLoader.loadLines("sample1A.txt");
+        List<String> input = fileLoader.loadLines("sample1.txt");
         int result = runner.sumOfCalibrationNumbers(input, false);
         assertEquals(142, result);
     }
