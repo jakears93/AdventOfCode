@@ -12,7 +12,7 @@ public class Day11Tests {
     private FileLoader fileLoader;
     private Day11 runner;
 
-    private int AOC_YEAR = 2023;
+    private static final int AOC_YEAR = 2023;
 
     @BeforeEach
     void setup(){
@@ -23,28 +23,28 @@ public class Day11Tests {
     @Test
     public void Day11A_sample(){
         List<String> input = fileLoader.loadLines("sample11.txt");
-        long result = runner.sumOfShortestPaths(input, 2);
+        long result = runner.sumOfShortestPaths(input, 2L);
         assertEquals(374L, result);
     }
 
     @Test
     public void Day11A_puzzle(){
         List<String> input = fileLoader.loadLines("input11.txt");
-        long result = runner.sumOfShortestPaths(input, 2);
+        long result = runner.sumOfShortestPaths(input, 2L);
         assertEquals(9609130L, result);
     }
 
     @Test
     public void Day11B_sample(){
         List<String> input = fileLoader.loadLines("sample11.txt");
-        long result = runner.sumOfShortestPaths(input, 1000000);
-        assertEquals(0L, result);
+        long result = runner.sumOfShortestPaths(input, 1000000L);
+        assertEquals(82000210L, result);
     }
 
     @Test
     public void Day11B_puzzle(){
         List<String> input = fileLoader.loadLines("input11.txt");
-        long result = runner.sumOfShortestPaths(input, 1000000);
-        assertEquals(0L, result);
+        long result = runner.sumOfShortestPaths(input, 1000000L);
+        assertEquals(702152204842L, result);
     }
 }

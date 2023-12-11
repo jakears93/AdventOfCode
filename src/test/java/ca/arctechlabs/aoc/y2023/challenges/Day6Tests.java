@@ -12,7 +12,7 @@ public class Day6Tests {
     private FileLoader fileLoader;
     private Day6 runner;
 
-    private int AOC_YEAR = 2023;
+    private static final int AOC_YEAR = 2023;
 
     @BeforeEach
     void setup(){

@@ -14,7 +14,7 @@ public class Day2Tests {
     private FileLoader fileLoader;
     private Day2 runner;
 
-    private int AOC_YEAR = 2023;
+    private static final int AOC_YEAR = 2023;
 
     @BeforeEach
     void setup(){

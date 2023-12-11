@@ -1,12 +1,13 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
+import ca.arctechlabs.aoc.y2023.models.Coordinates;
+
 import java.util.*;
 
 public class Day11 {
-    public long sumOfShortestPaths(List<String> input, int expansionMultiplier){
-        List<List<Integer>> rawGalaxyMap = applyCosmicExpansion(input, expansionMultiplier);
-        Map<Integer, Coordinates> galaxyMap = extractGalaxyCoordinates(rawGalaxyMap);
-
+    public long sumOfShortestPaths(List<String> input, long expansionMultiplier){
+        MapData mapData = parseMapData(input);
+        Map<Integer, Coordinates> galaxyMap = extractGalaxyCoordinates(mapData, expansionMultiplier);
         long sumOfPaths = 0L;
         for(int i=0; i<galaxyMap.size(); i++){
             Coordinates g1 = galaxyMap.get(i);
@@ -20,24 +21,37 @@ public class Day11 {
         return sumOfPaths;
     }
 
-    private Map<Integer, Coordinates> extractGalaxyCoordinates(List<List<Integer>> rawMap){
+    private Map<Integer, Coordinates> extractGalaxyCoordinates(MapData mapData, long expansionMultiplier){
+        List<List<Integer>> rawMap = mapData.getMap();
+
         Map<Integer, Coordinates> galaxyMap = new HashMap<>();
         for(int y=0; y<rawMap.size(); y++){
             List<Integer> row = rawMap.get(y);
             for(int x=0; x<row.size(); x++){
                 Integer galaxy = row.get(x);
                 if(Objects.nonNull(galaxy)){
-                    galaxyMap.put(galaxy, new Coordinates(x, y));
+                    galaxyMap.put(galaxy, calculateCoordinates(x, y, mapData, expansionMultiplier));
                 }
             }
         }
         return galaxyMap;
     }
 
-    private List<List<Integer>> applyCosmicExpansion(List<String> input, int multiplier){
+    private Coordinates calculateCoordinates(int x, int y, MapData mapData, long expansionMultiplier){
+        Coordinates coordinates = new Coordinates();
+        long numOfExpandedColumns = mapData.getExpandedColumn().stream().filter(index -> index<x).count();
+        long numOfExpandedRows = mapData.getExpandedRows().stream().filter(index -> index<y).count();
+        coordinates.setX(x+(numOfExpandedColumns*expansionMultiplier)-numOfExpandedColumns);
+        coordinates.setY(y+(numOfExpandedRows*expansionMultiplier)-numOfExpandedRows);
+        return coordinates;
+    }
+
+    private MapData parseMapData(List<String> input){
         List<List<Integer>> rawMap = new ArrayList<>();
+        List<Integer> expandedRows = new ArrayList<>();
         int galaxyCount = 0;
-        for(String line : input){
+        for(int l=0; l<input.size(); l++){
+            String line = input.get(l);
             List<Integer> row = new ArrayList<>();
             int startingGalaxyCount = galaxyCount;
             for(char c : line.toCharArray()){
@@ -50,15 +64,16 @@ public class Day11 {
             }
             //Expand extra row if empty
             if(startingGalaxyCount == galaxyCount){
-                for(int m=0; m<multiplier-1; m++){
-                    rawMap.add(row);
-                }
+                expandedRows.add(l);
             }
             rawMap.add(row);
         }
 
+
         boolean allNull;
         int rowSize = rawMap.get(0).size();
+
+        List<Integer> expandedColumns = new ArrayList<>();
         for(int rowIndex=0; rowIndex<rowSize; rowIndex++){
             allNull = true;
             for(int columnIndex=0; columnIndex<rawMap.size(); columnIndex++){
@@ -70,41 +85,33 @@ public class Day11 {
             }
             //Expand Column if every same row index in null;
             if(allNull){
-                for(int columnIndex=0; columnIndex<rawMap.size(); columnIndex++){
-                    List<Integer> row = rawMap.get(columnIndex);
-                    for(int m=0; m<multiplier-1; m++){
-                        row.add(rowIndex, null);
-                    }
-                }
-                rowIndex += (multiplier-1);
-                rowSize += (multiplier-1);
+                expandedColumns.add(rowIndex);
             }
         }
-        return rawMap;
+        return new MapData(rawMap, expandedColumns, expandedRows);
     }
-    private class Coordinates{
-        private final int x;
-        private final int y;
 
-        public Coordinates(int x, int y) {
-            this.x = x;
-            this.y = y;
+    private static class MapData{
+        private final List<Integer> expandedColumn;
+        private final List<Integer> expandedRows;
+        private final List<List<Integer>> map;
+
+        public MapData(List<List<Integer>> map, List<Integer> expandedColumn, List<Integer> expandedRows) {
+            this.expandedColumn = expandedColumn;
+            this.expandedRows = expandedRows;
+            this.map = map;
         }
 
-        public int getX() {
-            return x;
+        public List<Integer> getExpandedColumn() {
+            return expandedColumn;
         }
 
-        public int getY() {
-            return y;
+        public List<Integer> getExpandedRows() {
+            return expandedRows;
         }
 
-        @Override
-        public String toString() {
-            return "Coordinates{" +
-                    "x=" + x +
-                    ", y=" + y +
-                    "}\n";
+        public List<List<Integer>> getMap() {
+            return map;
         }
     }
 }
