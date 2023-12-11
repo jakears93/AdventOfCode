@@ -24,7 +24,7 @@ public class Day10Tests {
     public void Day10A_sample(){
         List<String> input = fileLoader.loadLines("sample10.txt");
         this.runner.populateMaze(input);
-        long result = runner.areaInsideLoop()/2;
+        long result = runner.lengthOfLoop()/2;
         assertEquals(8L, result);
     }
 

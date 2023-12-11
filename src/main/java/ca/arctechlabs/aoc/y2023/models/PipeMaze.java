@@ -1,7 +1,7 @@
 package ca.arctechlabs.aoc.y2023.models;
 
 public class PipeMaze {
-    private final Pipe[][] maze;
+    private final Location[][] maze;
     private final int mazeHeight;
     private final int mazeWidth;
     private Integer startX;
@@ -10,7 +10,7 @@ public class PipeMaze {
     public PipeMaze(int mazeHeight, int mazeWidth) {
         this.mazeHeight = mazeHeight;
         this.mazeWidth = mazeWidth;
-        this.maze = new Pipe[mazeHeight][mazeWidth];
+        this.maze = new Location[mazeHeight][mazeWidth];
     }
 
     public Integer getStartX() {
@@ -34,11 +34,23 @@ public class PipeMaze {
         return mazeWidth;
     }
 
-    public Pipe[][] getMaze() {
+    public Location[][] getMaze() {
         return maze;
     }
 
-    public void addRowToMaze(Pipe[] row, int y) {
+    public void addRowToMaze(Location[] row, int y) {
         this.maze[y] = row;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("\n");
+        for(int y=0; y<this.getMaze().length; y++){
+            for(int x=0; x<this.maze[y].length; x++){
+                sb.append(this.maze[y][x].getStatus()).append(",");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }
