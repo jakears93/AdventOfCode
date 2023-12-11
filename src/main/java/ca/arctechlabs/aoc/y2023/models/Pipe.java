@@ -1,7 +1,5 @@
 package ca.arctechlabs.aoc.y2023.models;
 
-import java.util.Arrays;
-
 public enum Pipe {
     NS('|', PipeDirection.NORTH, PipeDirection.SOUTH),
     EW('-', PipeDirection.EAST, PipeDirection.WEST),

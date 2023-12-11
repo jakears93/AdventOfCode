@@ -1,7 +1,5 @@
 package ca.arctechlabs.aoc.y2023.models;
 
-import java.util.Arrays;
-
 public class PipeMaze {
     private final Pipe[][] maze;
     private final int mazeHeight;

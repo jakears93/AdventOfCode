@@ -11,36 +11,48 @@ public class Day10 {
     private PipeMaze pipeMaze;
 
     public long lengthOfLoop(){
-        long loopLength = -1L;
-        for(PipeDirection heading: PipeDirection.values()){
-            loopLength = followPipe(this.pipeMaze.getStartX(), this.pipeMaze.getStartY(), heading, 0);
+        long loopLength = 0L;
+        for(PipeDirection direction: PipeDirection.values()){
+            loopLength = followPipe(this.pipeMaze.getStartX(), this.pipeMaze.getStartY(), direction);
             if(loopLength>0){
                 break;
             }
         }
         return loopLength;
     }
-    private long followPipe(int x, int y, PipeDirection heading, long stepsTaken){
-        Pipe nextPipe = getNextPipe(x, y, heading);
 
-        if(Pipe.START.equals(nextPipe)){
-            return stepsTaken+1;
-        }
-        if(Pipe.INVALID.equals(nextPipe) || Objects.isNull(nextPipe)){
-            return -1L;
-        }
+    public long areaInsideLoop(){
+        //TODO
+        return 0L;
+    }
+    private long followPipe(int initialX, int initialY, PipeDirection heading){
+        Pipe nextPipe;
+        long loopLength = 0L;
+        int x = initialX;
+        int y = initialY;
+        while(true){
+            nextPipe = getNextPipe(x, y, heading);
+            if(Pipe.START.equals(nextPipe)){
+                loopLength++;
+                break;
+            }
+            if(Pipe.INVALID.equals(nextPipe) || Objects.isNull(nextPipe)){
+                loopLength = -1L;
+                break;
+            }
+            x += heading.getxMovement();
+            y += heading.getyMovement();
+            PipeDirection complement = getComplement(heading);
+            if(nextPipe.getEntry().equals(complement)){
+                heading = nextPipe.getExit();
+            }
+            else{
+                heading = nextPipe.getEntry();
+            }
+            loopLength++;
 
-        int nextX = x + heading.getxMovement();
-        int nextY = y + heading.getyMovement();
-        PipeDirection complement = getComplement(heading);
-        PipeDirection nextHeading;
-        if(nextPipe.getEntry().equals(complement)){
-            nextHeading = nextPipe.getExit();
         }
-        else{
-            nextHeading = nextPipe.getEntry();
-        }
-        return followPipe(nextX, nextY, nextHeading, stepsTaken+1);
+        return loopLength;
     }
 
     private PipeDirection getComplement(PipeDirection heading){
