@@ -67,4 +67,21 @@ public class Utils {
 
         return true;
     }
+
+    public static long combination(long n, long r){
+        long nF = factorial(n);
+        long rF = factorial(r);
+        long nrF = factorial(n-r);
+        return nF/(rF*nrF);
+    }
+
+    public static long factorial(long number) {
+        long result = 1;
+
+        for (int factor = 2; factor <= number; factor++) {
+            result *= factor;
+        }
+
+        return result;
+    }
 }
