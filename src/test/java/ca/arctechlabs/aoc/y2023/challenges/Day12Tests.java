@@ -22,28 +22,28 @@ public class Day12Tests {
 
     @Test
     public void Day12A_sample(){
-        List<String> input = fileLoader.loadLines("sample12.txt");
+        List<String> input = fileLoader.readAsLines("sample12.txt");
         long result = runner.totalArrangements(input);
         assertEquals(21L, result);
     }
 
     @Test
     public void Day12A_puzzle(){
-        List<String> input = fileLoader.loadLines("input12.txt");
+        List<String> input = fileLoader.readAsLines("input12.txt");
         long result = runner.totalArrangements(input);
         assertEquals(6488L, result);
     }
 
     @Test
     public void Day12B_sample(){
-        List<String> input = fileLoader.loadLines("sample12.txt");
+        List<String> input = fileLoader.readAsLines("sample12.txt");
         long result = runner.totalArrangements(input, 5);
         assertEquals(525152L, result);
     }
 
     @Test
     public void Day12B_puzzle(){
-        List<String> input = fileLoader.loadLines("input12.txt");
+        List<String> input = fileLoader.readAsLines("input12.txt");
         long result = runner.totalArrangements(input);
         assertEquals(0L, result);
     }

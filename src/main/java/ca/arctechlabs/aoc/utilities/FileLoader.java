@@ -15,28 +15,42 @@ public class FileLoader {
         this.year = year;
     }
 
-    public List<String> loadLines(String fileName){
-        String testType;
-        if(fileName.startsWith("sample")){
-            testType = "samples";
+    public List<String> readAsLines(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(getFile(fileName)))) {
+            return reader.lines().toList();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
-        else if(fileName.startsWith("input")){
-            testType = "inputs";
+    }
+
+    private File getFile(String fileName){
+        TestType type = TestType.fromFileName(fileName);
+        String path = String.format(BASE_PATH, this.year, type.getValue()) + fileName;
+        return new File(path);
+    }
+}
+
+enum TestType{
+    SAMPLE("sample", "samples"),
+    INPUT("input", "inputs");
+
+    private final String key;
+    private final String value;
+
+    TestType(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public static TestType fromFileName(String fileName){
+        for(TestType type : TestType.values()){
+            if(fileName.startsWith(type.key)) return type;
         }
-        else{
-            throw new IllegalArgumentException();
-        }
+        throw new IllegalArgumentException("Unable to find key for: "+fileName);
+    }
 
-        String path = String.format(BASE_PATH, this.year, testType) + fileName;
-        File input = new File(path);
-
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
-            while(reader.ready()){
-                lines.add(reader.readLine());
-            }
-        } catch (IOException e) { e.printStackTrace(); }
-
-        return lines;
+    public String getValue() {
+        return value;
     }
 }

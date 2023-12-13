@@ -25,7 +25,7 @@ public class Day2Tests {
     @Test
     public void day2A_sample(){
         Map<String, Integer> rules = createRules(12, 13, 14);
-        List<String> input = fileLoader.loadLines("sample2.txt");
+        List<String> input = fileLoader.readAsLines("sample2.txt");
         int result = runner.countValidGames(input, rules);
         assertEquals(8, result);
     }
@@ -33,21 +33,21 @@ public class Day2Tests {
     @Test
     public void day2A_puzzle(){
         Map<String, Integer> rules = createRules(12, 13, 14);
-        List<String> input = fileLoader.loadLines("input2.txt");
+        List<String> input = fileLoader.readAsLines("input2.txt");
         int result = runner.countValidGames(input, rules);
         assertEquals(2512, result);
     }
 
     @Test
     public void day2B_sample(){
-        List<String> input = fileLoader.loadLines("sample2B.txt");
+        List<String> input = fileLoader.readAsLines("sample2B.txt");
         int result = runner.sumOfPowerOfSets(input);
         assertEquals(2286, result);
     }
 
     @Test
     public void day2B_puzzle(){
-        List<String> input = fileLoader.loadLines("input2.txt");
+        List<String> input = fileLoader.readAsLines("input2.txt");
         int result = runner.sumOfPowerOfSets(input);
         assertEquals(67335, result);
     }

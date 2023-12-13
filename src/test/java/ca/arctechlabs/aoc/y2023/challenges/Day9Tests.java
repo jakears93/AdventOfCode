@@ -22,28 +22,28 @@ public class Day9Tests {
 
     @Test
     public void day9A_sample(){
-        List<String> input = fileLoader.loadLines("sample9.txt");
+        List<String> input = fileLoader.readAsLines("sample9.txt");
         long result = runner.sumOfExtrapolations(input, false);
         assertEquals(114L, result);
     }
 
     @Test
     public void day9A_puzzle(){
-        List<String> input = fileLoader.loadLines("input9.txt");
+        List<String> input = fileLoader.readAsLines("input9.txt");
         long result = runner.sumOfExtrapolations(input, false);
         assertEquals(1581679977L, result);
     }
 
     @Test
     public void day9B_sample(){
-        List<String> input = fileLoader.loadLines("sample9.txt");
+        List<String> input = fileLoader.readAsLines("sample9.txt");
         long result = runner.sumOfExtrapolations(input, true);
         assertEquals(2L, result);
     }
 
     @Test
     public void day9B_puzzle(){
-        List<String> input = fileLoader.loadLines("input9.txt");
+        List<String> input = fileLoader.readAsLines("input9.txt");
         long result = runner.sumOfExtrapolations(input, true);
         assertEquals(889L, result);
     }

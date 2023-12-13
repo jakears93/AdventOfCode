@@ -22,28 +22,28 @@ public class Day3Tests {
 
     @Test
     public void day3A_sample(){
-        List<String> input = fileLoader.loadLines("sample3.txt");
+        List<String> input = fileLoader.readAsLines("sample3.txt");
         int result = runner.sumOfPartNumbers(input);
         assertEquals(4361, result);
     }
 
     @Test
     public void day3A_puzzle(){
-        List<String> input = fileLoader.loadLines("input3.txt");
+        List<String> input = fileLoader.readAsLines("input3.txt");
         int result = runner.sumOfPartNumbers(input);
         assertEquals(530849, result);
     }
 
     @Test
     public void day3B_sample(){
-        List<String> input = fileLoader.loadLines("sample3.txt");
+        List<String> input = fileLoader.readAsLines("sample3.txt");
         int result = runner.sumOfGearRatios(input);
         assertEquals(467835, result);
     }
 
     @Test
     public void day3B_puzzle(){
-        List<String> input = fileLoader.loadLines("input3.txt");
+        List<String> input = fileLoader.readAsLines("input3.txt");
         int result = runner.sumOfGearRatios(input);
         assertEquals(84900879, result);
     }

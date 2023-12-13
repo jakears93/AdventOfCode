@@ -22,28 +22,28 @@ public class Day7Tests {
 
     @Test
     public void day7A_sample(){
-        List<String> input = fileLoader.loadLines("sample7.txt");
+        List<String> input = fileLoader.readAsLines("sample7.txt");
         long result = runner.totalWinnings(input, false);
         assertEquals(6440L, result);
     }
 
     @Test
     public void day7A_puzzle(){
-        List<String> input = fileLoader.loadLines("input7.txt");
+        List<String> input = fileLoader.readAsLines("input7.txt");
         long result = runner.totalWinnings(input, false);
         assertEquals(254024898L, result);
     }
 
     @Test
     public void day7B_sample(){
-        List<String> input = fileLoader.loadLines("sample7.txt");
+        List<String> input = fileLoader.readAsLines("sample7.txt");
         long result = runner.totalWinnings(input, true);
         assertEquals(5905L, result);
     }
 
     @Test
     public void day7B_puzzle(){
-        List<String> input = fileLoader.loadLines("input7.txt");
+        List<String> input = fileLoader.readAsLines("input7.txt");
         long result = runner.totalWinnings(input, true);
         assertEquals(254115617L, result);
     }

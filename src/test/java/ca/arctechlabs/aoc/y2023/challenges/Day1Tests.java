@@ -22,28 +22,28 @@ public class Day1Tests {
 
     @Test
     public void day1A_sample(){
-        List<String> input = fileLoader.loadLines("sample1.txt");
+        List<String> input = fileLoader.readAsLines("sample1.txt");
         int result = runner.sumOfCalibrationNumbers(input, false);
         assertEquals(142, result);
     }
 
     @Test
     public void day1A_puzzle(){
-        List<String> input = fileLoader.loadLines("input1.txt");
+        List<String> input = fileLoader.readAsLines("input1.txt");
         int result = runner.sumOfCalibrationNumbers(input, false);
         assertEquals(54708, result);
     }
 
     @Test
     public void day1B_sample(){
-        List<String> input = fileLoader.loadLines("sample1B.txt");
+        List<String> input = fileLoader.readAsLines("sample1B.txt");
         int result = runner.sumOfCalibrationNumbers(input, true);
         assertEquals(281, result);
     }
 
     @Test
     public void day1B_puzzle(){
-        List<String> input = fileLoader.loadLines("input1.txt");
+        List<String> input = fileLoader.readAsLines("input1.txt");
         int result = runner.sumOfCalibrationNumbers(input, true);
         assertEquals(54087, result);
     }

@@ -22,21 +22,21 @@ public class Day5Tests {
 
     @Test
     public void day5A_sample(){
-        List<String> input = fileLoader.loadLines("sample5.txt");
+        List<String> input = fileLoader.readAsLines("sample5.txt");
         long result = runner.inPlaceMinimumLocation(input, false);
         assertEquals(35L, result);
     }
 
     @Test
     public void day5A_puzzle(){
-        List<String> input = fileLoader.loadLines("input5.txt");
+        List<String> input = fileLoader.readAsLines("input5.txt");
         long result = runner.inPlaceMinimumLocation(input, false);
         assertEquals(993500720L, result);
     }
 
     @Test
     public void day5B_sample(){
-        List<String> input = fileLoader.loadLines("sample5.txt");
+        List<String> input = fileLoader.readAsLines("sample5.txt");
         long result = runner.inPlaceMinimumLocation(input, true);
         assertEquals(46L, result);
     }
@@ -44,7 +44,7 @@ public class Day5Tests {
     @Test
     public void day5B_puzzle(){
         //5 Min run time, need to optimize
-        List<String> input = fileLoader.loadLines("input5.txt");
+        List<String> input = fileLoader.readAsLines("input5.txt");
         long result = runner.inPlaceMinimumLocation(input, true);
         assertEquals(4917124L, result);
     }

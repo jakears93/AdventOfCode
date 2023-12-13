@@ -22,28 +22,28 @@ public class Day4Tests {
 
     @Test
     public void day4A_sample(){
-        List<String> input = fileLoader.loadLines("sample4.txt");
+        List<String> input = fileLoader.readAsLines("sample4.txt");
         int result = runner.sumOfCardScore(input);
         assertEquals(13, result);
     }
 
     @Test
     public void day4A_puzzle(){
-        List<String> input = fileLoader.loadLines("input4.txt");
+        List<String> input = fileLoader.readAsLines("input4.txt");
         int result = runner.sumOfCardScore(input);
         assertEquals(23847, result);
     }
 
     @Test
     public void day4B_sample(){
-        List<String> input = fileLoader.loadLines("sample4.txt");
+        List<String> input = fileLoader.readAsLines("sample4.txt");
         int result = runner.sumOfAllCardsAfterWinningCopies(input);
         assertEquals(30, result);
     }
 
     @Test
     public void day4B_puzzle(){
-        List<String> input = fileLoader.loadLines("input4.txt");
+        List<String> input = fileLoader.readAsLines("input4.txt");
         int result = runner.sumOfAllCardsAfterWinningCopies(input);
         assertEquals(8570000, result);
     }

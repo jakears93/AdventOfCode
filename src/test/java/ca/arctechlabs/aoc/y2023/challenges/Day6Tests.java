@@ -22,28 +22,28 @@ public class Day6Tests {
 
     @Test
     public void day6A_sample(){
-        List<String> input = fileLoader.loadLines("sample6.txt");
+        List<String> input = fileLoader.readAsLines("sample6.txt");
         long result = runner.getMargin(input, 1);
         assertEquals(288L, result);
     }
 
     @Test
     public void day6A_puzzle(){
-        List<String> input = fileLoader.loadLines("input6.txt");
+        List<String> input = fileLoader.readAsLines("input6.txt");
         long result = runner.getMargin(input, 1);
         assertEquals(500346L, result);
     }
 
     @Test
     public void day6B_sample(){
-        List<String> input = fileLoader.loadLines("sample6.txt");
+        List<String> input = fileLoader.readAsLines("sample6.txt");
         long result = runner.getMarginAsSingleRace(input, 1);
         assertEquals(71503L, result);
     }
 
     @Test
     public void day6B_puzzle(){
-        List<String> input = fileLoader.loadLines("input6.txt");
+        List<String> input = fileLoader.readAsLines("input6.txt");
         long result = runner.getMarginAsSingleRace(input, 1);
         assertEquals(42515755L, result);
     }
