@@ -70,6 +70,11 @@ public class Day13 {
         }
     }
 
+    private boolean checkIfSmudged(int line1, int line2){
+        int difference = Math.abs(line2-line1);
+        return (difference != 0) && ((difference & (difference-1)) == 0);
+    }
+
     public List<Integer> convertToColumnBits(List<String> lines, char bitMarker){
         int columnSize = lines.get(0).length();
         List<Integer> bitMap = new ArrayList<>(columnSize);
