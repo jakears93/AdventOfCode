@@ -10,6 +10,12 @@ public class Day13 {
         List<List<String>> mirrors = splitIntoMirrors(lines);
         return mirrors.stream().mapToLong(this::findMirrorNumber).sum();
     }
+
+    public long findSmudgedMirrorNumberSum(List<String> lines){
+        List<List<String>> mirrors = splitIntoMirrors(lines);
+        return mirrors.stream().mapToLong(this::findSmudgedMirrorNumber).sum();
+    }
+
     private long findMirrorNumber(List<String> partialLines){
         List<Integer> bits = convertToRowBits(partialLines, '#');
         Integer rowIndex = checkIfMirrored(bits);
@@ -24,22 +30,62 @@ public class Day13 {
         return 0L;
     }
 
-    private List<List<String>> splitIntoMirrors(List<String> input){
-        List<List<String>> mirrors = new ArrayList<>();
-        List<Integer> spacers = new ArrayList<>();
-
-        for(int i=0; i<input.size(); i++){
-            if(input.get(i).isBlank()) spacers.add(i);
+    private long findSmudgedMirrorNumber(List<String> partialLines){
+        List<Integer> bits = convertToRowBits(partialLines, '#');
+        Integer smudgedMirrorIndex = checkIfSmudgedMirror(bits);
+        if(smudgedMirrorIndex != null){
+            return smudgedMirrorIndex*100;
         }
 
-        int start = 0;
-        for(Integer index : spacers){
-            mirrors.add(input.subList(start, index));
-            start = index+1;
+        bits = convertToColumnBits(partialLines, '#');
+        smudgedMirrorIndex = checkIfSmudgedMirror(bits);
+        if(smudgedMirrorIndex != null){
+            return smudgedMirrorIndex;
         }
-        mirrors.add(input.subList(start, input.size()));
-        return mirrors;
+
+        return 0L;
     }
+
+    private Integer checkIfSmudgedMirror(List<Integer> bitMap) {
+        Integer mirrorIndex = null;
+        boolean foundSmudge = false;
+        boolean isMirrored = false;
+        for(int i=0; i<bitMap.size()-1; i++){
+            foundSmudge = checkIfSmudged(bitMap.get(i), bitMap.get(i + 1));
+            if(Objects.equals(bitMap.get(i), bitMap.get(i + 1)) || foundSmudge){
+                isMirrored = true;
+                if(foundSmudge){
+                    mirrorIndex = i+1;
+                }
+                int offset=1;
+                while((i-offset) >= 0 && (i+offset)<(bitMap.size()-1)){
+                    int left = bitMap.get(i-offset);
+                    int right = bitMap.get(i+offset+1);
+                    offset++;
+                    if(left != right){
+                        if(!foundSmudge && checkIfSmudged(left, right)){
+                            foundSmudge=true;
+                            mirrorIndex = i+1;
+                        }
+                        else{
+                            isMirrored = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(isMirrored && foundSmudge){
+                break;
+            }
+        }
+        if(isMirrored && foundSmudge){
+            return mirrorIndex;
+        }
+        else{
+            return null;
+        }
+    }
+
     private Integer checkIfMirrored(List<Integer> bitMap) {
         boolean isMirrored = false;
         Integer mirrorIndex = null;
@@ -47,11 +93,11 @@ public class Day13 {
             if(Objects.equals(bitMap.get(i), bitMap.get(i + 1))){
                 isMirrored = true;
                 mirrorIndex = i+1;
-                int j=1;
-                while((i-j) >= 0 && (i+j)<(bitMap.size()-1)){
-                    int left = bitMap.get(i-j);
-                    int right = bitMap.get(i+j+1);
-                    j++;
+                int offset=1;
+                while((i-offset) >= 0 && (i+offset)<(bitMap.size()-1)){
+                    int left = bitMap.get(i-offset);
+                    int right = bitMap.get(i+offset+1);
+                    offset++;
                     if(left != right){
                         isMirrored = false;
                         break;
@@ -100,5 +146,22 @@ public class Day13 {
             bitMap.add(bitLine);
         }
         return bitMap;
+    }
+
+    private List<List<String>> splitIntoMirrors(List<String> input){
+        List<List<String>> mirrors = new ArrayList<>();
+        List<Integer> spacers = new ArrayList<>();
+
+        for(int i=0; i<input.size(); i++){
+            if(input.get(i).isBlank()) spacers.add(i);
+        }
+
+        int start = 0;
+        for(Integer index : spacers){
+            mirrors.add(input.subList(start, index));
+            start = index+1;
+        }
+        mirrors.add(input.subList(start, input.size()));
+        return mirrors;
     }
 }

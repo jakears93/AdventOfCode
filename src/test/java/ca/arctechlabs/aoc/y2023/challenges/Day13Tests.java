@@ -37,14 +37,14 @@ public class Day13Tests {
     @Test
     public void Day13B_sample(){
         List<String> input = fileLoader.readAsLines("sample13.txt");
-        long result = runner.findMirrorNumberSum(input);
-        assertEquals(0L, result);
+        long result = runner.findSmudgedMirrorNumberSum(input);
+        assertEquals(400L, result);
     }
 
     @Test
     public void Day13B_puzzle(){
         List<String> input = fileLoader.readAsLines("input13.txt");
-        long result = runner.findMirrorNumberSum(input);
-        assertEquals(0L, result);
+        long result = runner.findSmudgedMirrorNumberSum(input);
+        assertEquals(37416L, result);
     }
 }
