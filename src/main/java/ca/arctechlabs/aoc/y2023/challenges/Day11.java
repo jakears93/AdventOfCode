@@ -4,6 +4,7 @@ import ca.arctechlabs.aoc.y2023.models.Coordinates;
 
 import java.util.*;
 
+//https://adventofcode.com/2023/day/11
 public class Day11 {
     public long sumOfShortestPaths(List<String> input, long expansionMultiplier){
         MapData mapData = parseMapData(input);

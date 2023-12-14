@@ -4,6 +4,7 @@ import ca.arctechlabs.aoc.y2023.models.*;
 
 import java.util.*;
 
+//https://adventofcode.com/2023/day/10
 public class Day10 {
 
     private PipeMaze pipeMaze;

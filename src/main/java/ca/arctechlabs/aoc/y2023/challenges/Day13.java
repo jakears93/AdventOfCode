@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+//https://adventofcode.com/2023/day/13
 public class Day13 {
 
     public long findMirrorNumberSum(List<String> lines){

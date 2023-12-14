@@ -6,6 +6,7 @@ import ca.arctechlabs.aoc.utilities.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+//https://adventofcode.com/2023/day/12
 public class Day12 {
     public long totalArrangements(List<String> input) {
         List<SpringData> springDataList = parseInput(input);
