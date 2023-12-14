@@ -39,15 +39,86 @@ public class Day10 {
         for(Direction direction : path){
             Location location = this.pipeMaze.getMaze()[y][x];
             heading = calculateNextHeading(heading, direction);
-            //get location on left and set to inside
+            //get location on left and set to inside, if already set, skip to next location in path;
+            Coordinates deltaCoords = getAdjacentCoordinates(location, insideDirection, heading);
+            try{
+                //get all adjacent locations to the inside pipe that are unchecked and set to inside
+                floodFill(this.pipeMaze.getMaze(), (int)(y+deltaCoords.getY()), (int) (x+deltaCoords.getX()));
+            } catch(Exception ignored){}
 
-            //get all adjacent locations that are unchecked and set to inside
 
             //navigate to next location in path
             x += heading.getxMovement();
             y += heading.getyMovement();
         }
     }
+
+    private void floodFill(Location[][] maze, int y, int x) {
+        Location inside = maze[y][x];
+        if(inside.getStatus().equals(PipeStatus.INSIDE) || inside.getStatus().equals(PipeStatus.PATH)){
+            return;
+        }
+        inside.setStatus(PipeStatus.INSIDE);
+        //get all adjacent locations to the inside pipe that are unchecked and set to inside
+    }
+
+    private boolean validateCoordinatesRelativeToPath(int newX, int newY, Location[][] maze) {
+        return (maze[0].length > newX) && (maze.length > newY);
+    }
+
+    private Coordinates getAdjacentCoordinates(Location location, Direction insideDirection, PipeDirection heading) {
+        Coordinates coordinates = new Coordinates();
+        if(Direction.RIGHT.equals(insideDirection)){
+            switch (heading){
+                case NORTH ->{
+                    coordinates.setX(1);
+                    coordinates.setY(0);
+                }
+                case SOUTH ->{
+                    coordinates.setX(-1);
+                    coordinates.setY(0);
+                }
+                case EAST -> {
+                    coordinates.setX(0);
+                    coordinates.setY(-1);
+                }
+                case WEST -> {
+                    coordinates.setX(0);
+                    coordinates.setY(1);
+                }
+                default -> {
+                    coordinates.setX(0);
+                    coordinates.setY(0);
+                }
+            }
+        }
+        else{
+            switch (heading){
+                case NORTH ->{
+                    coordinates.setX(-1);
+                    coordinates.setY(0);
+                }
+                case SOUTH ->{
+                    coordinates.setX(1);
+                    coordinates.setY(0);
+                }
+                case EAST -> {
+                    coordinates.setX(0);
+                    coordinates.setY(1);
+                }
+                case WEST -> {
+                    coordinates.setX(0);
+                    coordinates.setY(-1);
+                }
+                default -> {
+                    coordinates.setX(0);
+                    coordinates.setY(0);
+                }
+            }
+        }
+        return coordinates;
+    }
+
     private long countInsides(){
         Location[][] maze = this.pipeMaze.getMaze();
         long count = 0;
