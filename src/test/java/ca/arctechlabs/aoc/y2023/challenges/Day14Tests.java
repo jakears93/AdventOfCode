@@ -39,15 +39,12 @@ public class Day14Tests {
         List<String> input = fileLoader.readAsLines("sample14.txt");
         long result = runner.sumOfNorthLoadWithFullCycles(input, 1000000000);
         assertEquals(64L, result);
-//        //approx 1.7 seconds for 1000000 cycles
-//        assertEquals(63L, result);
-
     }
 
     @Test
     public void Day14B_puzzle(){
         List<String> input = fileLoader.readAsLines("input14.txt");
-        long result = runner.sumOfNorthLoadWithFullCycles(input, 1000000);
-        assertEquals(0L, result);
+        long result = runner.sumOfNorthLoadWithFullCycles(input, 1000000000);
+        assertEquals(95736L, result);
     }
 }
