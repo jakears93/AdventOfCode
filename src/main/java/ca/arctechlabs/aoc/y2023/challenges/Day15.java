@@ -29,69 +29,26 @@ public class Day15 {
         }
 
         for(String lensString : entries){
-            Lens lens = parseLens(lensString);
-            LinkedHashMap<String, Integer> box = boxes.get(hash(lens.getId()));
-            if(lens.getOperation().equals("=")){
-                box.compute(lens.getId(), (k, v) -> lens.getFocalLength());
+            if(lensString.contains("=")){
+                int focalLength = Integer.parseInt(String.valueOf(lensString.charAt(lensString.length()-1)));
+                String id = lensString.replace("=", "").replace(String.valueOf(focalLength), "");
+                boxes.get(hash(id)).compute(id, (k, v) -> focalLength);
             }
             else{
-                box.remove(lens.getId());
+                String id = lensString.replace("-", "");
+                boxes.get(hash(id)).remove(id);
             }
         }
         return boxes;
     }
 
-    private Lens parseLens(String lensString) {
-        String operation = lensString.contains("-") ? "-" : "=";
-        int focalLength = 0;
-        String id;
-
-        try{
-            focalLength = Integer.parseInt(String.valueOf(lensString.charAt(lensString.length()-1)));
-        } catch (NumberFormatException ignored){}
-
-        id = lensString.replace(operation, "").replace(String.valueOf(focalLength), "");
-        return new Lens(id, focalLength, operation);
-    }
-
     private int hash(String word){
-        char[] chars = word.toCharArray();
-        int current = 0;
-        for (char c : chars) {
-            current += c;
-            current *= 17;
-            current = current % 256;
+        int hash = 0;
+        for (char c : word.toCharArray()) {
+            hash += c;
+            hash *= 17;
+            hash = hash & 255;
         }
-        return current;
-    }
-
-    private class Lens{
-        private final String id;
-        private int focalLength;
-        private final String operation;
-
-        public Lens(String id, int focalLength, String operation) {
-            this.id = id;
-            this.focalLength = focalLength;
-            this.operation = operation;
-        }
-
-        public void setFocalLength(int focalLength) {
-            this.focalLength = focalLength;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public int getFocalLength() {
-            return focalLength;
-        }
-
-        public String getOperation() {
-            return operation;
-        }
+        return hash;
     }
 }
-
-
