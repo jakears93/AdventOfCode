@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,17 @@ public class FileLoader {
     public List<String> readAsLines(String fileName) {
         try (BufferedReader reader = new BufferedReader(new FileReader(getFile(fileName)))) {
             return reader.lines().toList();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String[] readAsArray (String fileName, String separator){
+        try {
+            File file = getFile(fileName);
+            String content = Files.readString(Paths.get(file.toURI()));
+            return content.split(separator);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
