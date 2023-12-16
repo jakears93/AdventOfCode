@@ -7,22 +7,60 @@ import java.util.List;
 
 public class Day16 {
 
+    private List<String> input;
     private List<List<Tile>> tileMap;
-    public long getNumberOfIlluminatedTiles(List<String> input){
-        this.tileMap = parseTileMap(input);
 
-        Tile firstTile = this.tileMap.get(0).get(0);
+    public void resetTileMap() {
+        this.tileMap = parseTileMap(this.input);
+    }
+
+    public void setInput(List<String> input) {
+        this.input = input;
+    }
+
+    public long getMaxNumberOfIlluminatedTiles(){
+        resetTileMap();
+        int maxX = this.tileMap.get(0).size();
+        int maxY = this.tileMap.size();
+        long maxSum = 0;
+        for(int x=0; x<maxX; x++){
+            resetTileMap();
+            long sum = getNumberOfIlluminatedTiles(new Coordinates(x, 0), Direction.SOUTH);
+            if(sum > maxSum) maxSum = sum;
+            resetTileMap();
+            sum = getNumberOfIlluminatedTiles(new Coordinates(x, maxY-1), Direction.NORTH);
+            if(sum > maxSum) maxSum = sum;
+        }
+        for(int y=0; y<maxY; y++){
+            resetTileMap();
+            long sum = getNumberOfIlluminatedTiles(new Coordinates(0, y), Direction.EAST);
+            if(sum > maxSum) maxSum = sum;
+            resetTileMap();
+            sum = getNumberOfIlluminatedTiles(new Coordinates(maxX-1, y), Direction.WEST);
+            if(sum > maxSum) maxSum = sum;
+        }
+        return maxSum;
+    }
+
+    public long getNumberOfIlluminatedTiles(){
+        return getNumberOfIlluminatedTiles(new Coordinates(0,0), Direction.EAST);
+    }
+
+    private long getNumberOfIlluminatedTiles(Coordinates origin, Direction direction){
+        resetTileMap();
+
+        Tile firstTile = getNextTile(origin);
+        if(firstTile == null) return 0L;
         firstTile.setIlluminated(true);
-        List<Instruction> initialInstructions = getNextInstructions(this.tileMap.get(0).get(0), Direction.EAST);
+        List<Instruction> initialInstructions = getNextInstructions(this.tileMap.get((int)origin.getY()).get((int)origin.getX()), direction);
         for(Instruction instruction : initialInstructions){
-            followBeam(new Coordinates(0,0), instruction);
+            followBeam(new Coordinates(origin.getX(), origin.getY()), instruction);
         }
 
         long sum = 0;
         for(List<Tile> row : this.tileMap){
             sum += row.stream().filter(Tile::isIlluminated).count();
         }
-
         return sum;
     }
 

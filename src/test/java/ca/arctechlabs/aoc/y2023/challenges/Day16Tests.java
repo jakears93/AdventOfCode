@@ -23,28 +23,32 @@ public class Day16Tests {
     @Test
     public void Day16A_sample(){
         List<String> input = fileLoader.readAsLines("sample16.txt");
-        long result = runner.getNumberOfIlluminatedTiles(input);
+        this.runner.setInput(input);
+        long result = runner.getNumberOfIlluminatedTiles();
         assertEquals(46L, result);
     }
 
     @Test
     public void Day16A_puzzle(){
         List<String> input = fileLoader.readAsLines("input16.txt");
-        long result = runner.getNumberOfIlluminatedTiles(input);
+        this.runner.setInput(input);
+        long result = runner.getNumberOfIlluminatedTiles();
         assertEquals(6921L, result);
     }
 
     @Test
     public void Day16B_sample(){
         List<String> input = fileLoader.readAsLines("sample16.txt");
-        long result = runner.getNumberOfIlluminatedTiles(input);
-        assertEquals(0L, result);
+        this.runner.setInput(input);
+        long result = runner.getMaxNumberOfIlluminatedTiles();
+        assertEquals(51L, result);
     }
 
     @Test
     public void Day16B_puzzle(){
         List<String> input = fileLoader.readAsLines("input16.txt");
-        long result = runner.getNumberOfIlluminatedTiles(input);
-        assertEquals(0L, result);
+        this.runner.setInput(input);
+        long result = runner.getMaxNumberOfIlluminatedTiles();
+        assertEquals(7594L, result);
     }
 }
