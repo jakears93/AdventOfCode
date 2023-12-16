@@ -4,6 +4,14 @@ public class Coordinates{
     private long x;
     private long y;
 
+    public Coordinates() {
+    }
+
+    public Coordinates(long x, long y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public void setX(long x) {
         this.x = x;
     }
