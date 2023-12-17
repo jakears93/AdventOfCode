@@ -27,7 +27,7 @@ public class Day10 {
 
         setPipeStatusForPath(path);
         setPipeStatusForInside(path, insideDirection);
-        printInsides();
+        //printInsides();
         return countInsides();
     }
 
@@ -37,10 +37,10 @@ public class Day10 {
         for(int y=0; y<maze.length; y++){
             Location[] row = maze[y];
             for(int x=0; x<row.length; x++){
-                if(row[x].getStatus().equals(PipeStatus.INSIDE)) sb.append("#");
+                if(row[x].getStatus().equals(PipeStatus.INSIDE)) sb.append("I");
                 else if(row[x].getStatus().equals(PipeStatus.PATH)) sb.append(row[x].getPipe().getValue());
                 else if(row[x].getStatus().equals(PipeStatus.UNCHECKED)) sb.append("O");
-                else if(row[x].getStatus().equals(PipeStatus.OUTSIDE)) sb.append(" ");
+                else if(row[x].getStatus().equals(PipeStatus.OUTSIDE)) sb.append("O");
                 else sb.append(row[x].getPipe().getValue());
             }
             sb.append("\n");
@@ -55,10 +55,9 @@ public class Day10 {
         PipeDirection heading = this.initialHeading;
 
         for(Direction direction : path){
-            Location location = this.pipeMaze.getMaze()[y][x];
             heading = calculateNextHeading(heading, direction);
             //get location on left and set to inside, if already set, skip to next location in path;
-            Coordinates deltaCoords = getAdjacentCoordinates(location, insideDirection, heading);
+            Coordinates deltaCoords = getInsideDeltaCoords(insideDirection, heading);
             try{
                 //get all adjacent locations to the inside pipe that are unchecked and set to inside
                 floodFill(new Coordinates(x+deltaCoords.getX(), y+deltaCoords.getY()));
@@ -89,24 +88,16 @@ public class Day10 {
         int maxY = this.pipeMaze.getMaze().length;
         List<Coordinates> adjacent = new ArrayList<>();
         for(int x=-1; x<=1; x++){
-            if(origin.getX()+x<0 || origin.getX()+x >= maxX) continue;
+            if((origin.getX()+x)<0 || (origin.getX()+x) >= maxX) continue;
             for(int y=-1; y<=1; y++){
-                if(origin.getY()+y<0 || origin.getY()+y >= maxY || (x==0 && y==0)) continue;
+                if((origin.getY()+y)<0 || (origin.getY()+y) >= maxY || (x==0 && y==0)) continue;
                 Coordinates coordinates = new Coordinates(origin.getX()+x, origin.getY()+y);
-                if(coordinates.getX() == 42 && coordinates.getY()==13){
-                    System.out.println();
-                }
                 adjacent.add(coordinates);
             }
         }
         return adjacent;
     }
-
-    private boolean validateCoordinatesRelativeToPath(int newX, int newY, Location[][] maze) {
-        return (maze[0].length > newX) && (maze.length > newY);
-    }
-
-    private Coordinates getAdjacentCoordinates(Location location, Direction insideDirection, PipeDirection heading) {
+    private Coordinates getInsideDeltaCoords(Direction insideDirection, PipeDirection heading) {
         Coordinates coordinates = new Coordinates();
         if(Direction.RIGHT.equals(insideDirection)){
             switch (heading){
@@ -125,10 +116,6 @@ public class Day10 {
                 case WEST -> {
                     coordinates.setX(0);
                     coordinates.setY(-1);
-                }
-                default -> {
-                    coordinates.setX(0);
-                    coordinates.setY(0);
                 }
             }
         }
@@ -149,10 +136,6 @@ public class Day10 {
                 case WEST -> {
                     coordinates.setX(0);
                     coordinates.setY(1);
-                }
-                default -> {
-                    coordinates.setX(0);
-                    coordinates.setY(0);
                 }
             }
         }

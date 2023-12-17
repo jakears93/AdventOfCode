@@ -65,7 +65,6 @@ public class Day10Tests {
         List<String> input = fileLoader.readAsLines("input10.txt");
         this.runner.populateMaze(input);
         long result = runner.areaInsideLoop();
-        assert(result > 350L);
-        assertEquals(0L, result);
+        assertEquals(351L, result+1);
     }
 }

@@ -1,3 +1,4 @@
 Day 5B -> Optimize
-Day 10B -> solve
+Day 10B -> Figure out off by 1 error
 Day 12B -> solve
+Day 17A & B -> solve
