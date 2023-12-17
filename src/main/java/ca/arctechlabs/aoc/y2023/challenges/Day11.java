@@ -42,8 +42,8 @@ public class Day11 {
         Coordinates coordinates = new Coordinates();
         long numOfExpandedColumns = mapData.getExpandedColumn().stream().filter(index -> index<x).count();
         long numOfExpandedRows = mapData.getExpandedRows().stream().filter(index -> index<y).count();
-        coordinates.setX(x+(numOfExpandedColumns*expansionMultiplier)-numOfExpandedColumns);
-        coordinates.setY(y+(numOfExpandedRows*expansionMultiplier)-numOfExpandedRows);
+        coordinates.setX((int) (x+(numOfExpandedColumns*expansionMultiplier)-numOfExpandedColumns));
+        coordinates.setY((int) (y+(numOfExpandedRows*expansionMultiplier)-numOfExpandedRows));
         return coordinates;
     }
 

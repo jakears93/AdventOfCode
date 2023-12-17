@@ -27,7 +27,25 @@ public class Day10 {
 
         setPipeStatusForPath(path);
         setPipeStatusForInside(path, insideDirection);
+        printInsides();
         return countInsides();
+    }
+
+    private void printInsides(){
+        StringBuilder sb = new StringBuilder();
+        Location[][] maze = this.pipeMaze.getMaze();
+        for(int y=0; y<maze.length; y++){
+            Location[] row = maze[y];
+            for(int x=0; x<row.length; x++){
+                if(row[x].getStatus().equals(PipeStatus.INSIDE)) sb.append("#");
+                else if(row[x].getStatus().equals(PipeStatus.PATH)) sb.append(row[x].getPipe().getValue());
+                else if(row[x].getStatus().equals(PipeStatus.UNCHECKED)) sb.append("O");
+                else if(row[x].getStatus().equals(PipeStatus.OUTSIDE)) sb.append(" ");
+                else sb.append(row[x].getPipe().getValue());
+            }
+            sb.append("\n");
+        }
+        System.out.println(sb);
     }
 
     private void setPipeStatusForInside(List<Direction> path, Direction insideDirection){
@@ -43,7 +61,7 @@ public class Day10 {
             Coordinates deltaCoords = getAdjacentCoordinates(location, insideDirection, heading);
             try{
                 //get all adjacent locations to the inside pipe that are unchecked and set to inside
-                floodFill(this.pipeMaze.getMaze(), (int)(y+deltaCoords.getY()), (int) (x+deltaCoords.getX()));
+                floodFill(new Coordinates(x+deltaCoords.getX(), y+deltaCoords.getY()));
             } catch(Exception ignored){}
 
 
@@ -53,13 +71,35 @@ public class Day10 {
         }
     }
 
-    private void floodFill(Location[][] maze, int y, int x) {
-        Location inside = maze[y][x];
+    private void floodFill(Coordinates coordinates) {
+        Location inside = this.pipeMaze.getMaze()[coordinates.getY()][coordinates.getX()];
         if(inside.getStatus().equals(PipeStatus.INSIDE) || inside.getStatus().equals(PipeStatus.PATH)){
             return;
         }
         inside.setStatus(PipeStatus.INSIDE);
         //get all adjacent locations to the inside pipe that are unchecked and set to inside
+        List<Coordinates> adjacent = getAdjacent(coordinates);
+        for(Coordinates next : adjacent){
+            floodFill(next);
+        }
+    }
+
+    private List<Coordinates> getAdjacent(Coordinates origin){
+        int maxX = this.pipeMaze.getMaze()[0].length;
+        int maxY = this.pipeMaze.getMaze().length;
+        List<Coordinates> adjacent = new ArrayList<>();
+        for(int x=-1; x<=1; x++){
+            if(origin.getX()+x<0 || origin.getX()+x >= maxX) continue;
+            for(int y=-1; y<=1; y++){
+                if(origin.getY()+y<0 || origin.getY()+y >= maxY || (x==0 && y==0)) continue;
+                Coordinates coordinates = new Coordinates(origin.getX()+x, origin.getY()+y);
+                if(coordinates.getX() == 42 && coordinates.getY()==13){
+                    System.out.println();
+                }
+                adjacent.add(coordinates);
+            }
+        }
+        return adjacent;
     }
 
     private boolean validateCoordinatesRelativeToPath(int newX, int newY, Location[][] maze) {
@@ -80,11 +120,11 @@ public class Day10 {
                 }
                 case EAST -> {
                     coordinates.setX(0);
-                    coordinates.setY(-1);
+                    coordinates.setY(1);
                 }
                 case WEST -> {
                     coordinates.setX(0);
-                    coordinates.setY(1);
+                    coordinates.setY(-1);
                 }
                 default -> {
                     coordinates.setX(0);
@@ -104,11 +144,11 @@ public class Day10 {
                 }
                 case EAST -> {
                     coordinates.setX(0);
-                    coordinates.setY(1);
+                    coordinates.setY(-1);
                 }
                 case WEST -> {
                     coordinates.setX(0);
-                    coordinates.setY(-1);
+                    coordinates.setY(1);
                 }
                 default -> {
                     coordinates.setX(0);

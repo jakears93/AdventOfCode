@@ -33,6 +33,10 @@ public enum Pipe {
         return INVALID;
     }
 
+    public char getValue() {
+        return value;
+    }
+
     public PipeDirection getEntry() {
         return entry;
     }
