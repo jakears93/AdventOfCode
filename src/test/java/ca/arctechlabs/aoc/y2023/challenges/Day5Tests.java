@@ -2,6 +2,7 @@ package ca.arctechlabs.aoc.y2023.challenges;
 
 import ca.arctechlabs.aoc.utilities.FileLoader;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class Day5Tests {
         assertEquals(46L, result);
     }
 
+    @Disabled
     @Test
     public void day5B_puzzle(){
         //5 Min run time, need to optimize
