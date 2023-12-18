@@ -1,5 +1,8 @@
 package ca.arctechlabs.aoc.utilities;
 
+import ca.arctechlabs.aoc.y2023.models.Coordinates;
+
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,5 +86,39 @@ public class Utils {
         }
 
         return result;
+    }
+
+    public static BigInteger calculateAreaFromVerticies(List<Coordinates> verticies){
+        if(verticies.isEmpty()) return BigInteger.ZERO;
+
+        BigInteger pSum = new BigInteger(String.valueOf(0L));
+        BigInteger nSum = new BigInteger(String.valueOf(0L));
+        BigInteger x;
+        BigInteger y;
+        BigInteger product;
+        for(int i=0; i<verticies.size()-1; i++){
+            x = BigInteger.valueOf(verticies.get(i).getX());
+            y = BigInteger.valueOf(verticies.get(i+1).getY());
+            product = x.multiply(y);
+            pSum = pSum.add(product);
+        }
+        x = BigInteger.valueOf(verticies.get(verticies.size()-1).getX());
+        y = BigInteger.valueOf(verticies.get(0).getY());
+        product = x.multiply(y);
+        pSum = pSum.add(product);
+
+        for(int i=0; i<verticies.size()-1; i++){
+            x = BigInteger.valueOf(verticies.get(i+1).getX());
+            y = BigInteger.valueOf(verticies.get(i).getY());
+            product = x.multiply(y);
+            nSum = nSum.add(product);
+        }
+        x = BigInteger.valueOf(verticies.get(0).getX());
+        y = BigInteger.valueOf(verticies.get(verticies.size()-1).getY());
+        product = x.multiply(y);
+        nSum = nSum.add(product);
+
+        BigInteger abs = pSum.subtract(nSum).abs();
+        return abs.divide(BigInteger.valueOf(2));
     }
 }

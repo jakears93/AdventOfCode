@@ -43,7 +43,6 @@ public class Day18Tests {
         assertEquals(new BigInteger("31171"), result);
     }
 
-    @Disabled
     @Test
     public void Day18B_sample(){
         List<String> input = fileLoader.readAsLines("sample18.txt");
@@ -51,11 +50,10 @@ public class Day18Tests {
         assertEquals(new BigInteger("952408144115"), result);
     }
 
-    @Disabled
     @Test
     public void Day18B_puzzle(){
         List<String> input = fileLoader.readAsLines("input18.txt");
         BigInteger result = runner.countTrenchAreaColourSwap(input);
-        assertEquals(new BigInteger("0"), result);
+        assertEquals(new BigInteger("131431655002266"), result);
     }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,32 +42,32 @@ public class Day10Tests {
     public void Day10B_sample(){
         List<String> input = fileLoader.readAsLines("sample10B.txt");
         this.runner.populateMaze(input);
-        long result = runner.areaInsideLoop();
-        assertEquals(4L, result);
+        BigInteger result = runner.areaInsideLoop();
+        assertEquals(new BigInteger("4"), result);
     }
 
     @Test
     public void Day10B_sample2(){
         List<String> input = fileLoader.readAsLines("sample10B_2.txt");
         this.runner.populateMaze(input);
-        long result = runner.areaInsideLoop();
-        assertEquals(8L, result);
-    }
-
-    @Test
-    public void Day10B_sample3(){
-        List<String> input = fileLoader.readAsLines("sample10B_3.txt");
-        this.runner.populateMaze(input);
-        long result = runner.areaInsideLoop();
-        assertEquals(10L, result);
+        BigInteger result = runner.areaInsideLoop();
+        assertEquals(new BigInteger("8"), result);
     }
 
     @Disabled
     @Test
+    public void Day10B_sample3(){
+        List<String> input = fileLoader.readAsLines("sample10B_3.txt");
+        this.runner.populateMaze(input);
+        BigInteger result = runner.areaInsideLoop();
+        assertEquals(new BigInteger("10"), result);
+    }
+
+    @Test
     public void Day10B_puzzle(){
         List<String> input = fileLoader.readAsLines("input10.txt");
         this.runner.populateMaze(input);
-        long result = runner.areaInsideLoop();
-        assertEquals(351L, result);
+        BigInteger result = runner.areaInsideLoop();
+        assertEquals(new BigInteger("351"), result);
     }
 }

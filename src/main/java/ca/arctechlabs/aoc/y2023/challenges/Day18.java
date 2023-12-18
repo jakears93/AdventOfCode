@@ -1,5 +1,6 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
+import ca.arctechlabs.aoc.utilities.Utils;
 import ca.arctechlabs.aoc.y2023.models.Coordinates;
 
 import java.math.BigInteger;
@@ -11,48 +12,17 @@ public class Day18 {
         List<Instruction> instructions = parseInstructions(input);
         List<Coordinates> coordinates = convertInstructionsToVertexCoords(instructions);
         BigInteger perimeter = BigInteger.valueOf(countPerimeter(instructions));
-        return calculateAreaFromCoords(coordinates).add(perimeter.divide(BigInteger.TWO).add(BigInteger.ONE));
+        return Utils.calculateAreaFromVerticies(coordinates).add(perimeter.divide(BigInteger.TWO).add(BigInteger.ONE));
     }
 
     public BigInteger countTrenchAreaColourSwap(List<String> input){
         List<Instruction> instructions = parseColoursAsInstructions(input);
         List<Coordinates> coordinates = convertInstructionsToVertexCoords(instructions);
         BigInteger perimeter = BigInteger.valueOf(countPerimeter(instructions));
-        return calculateAreaFromCoords(coordinates).add(perimeter.divide(BigInteger.TWO).add(BigInteger.ONE));
+        return Utils.calculateAreaFromVerticies(coordinates).add(perimeter.divide(BigInteger.TWO).add(BigInteger.ONE));
     }
     private long countPerimeter(List<Instruction> instructions){
         return instructions.stream().mapToLong(Instruction::getSteps).sum();
-    }
-    private BigInteger calculateAreaFromCoords(List<Coordinates> coordinates){
-        BigInteger pSum = new BigInteger(String.valueOf(0L));
-        BigInteger nSum = new BigInteger(String.valueOf(0L));
-        BigInteger x;
-        BigInteger y;
-        BigInteger product;
-        for(int i=0; i<coordinates.size()-1; i++){
-            x = BigInteger.valueOf(coordinates.get(i).getX());
-            y = BigInteger.valueOf(coordinates.get(i+1).getY());
-            product = x.multiply(y);
-            pSum = pSum.add(product);
-        }
-        x = BigInteger.valueOf(coordinates.get(coordinates.size()-1).getX());
-        y = BigInteger.valueOf(coordinates.get(0).getY());
-        product = x.multiply(y);
-        pSum = pSum.add(product);
-
-        for(int i=0; i<coordinates.size()-1; i++){
-            x = BigInteger.valueOf(coordinates.get(i+1).getX());
-            y = BigInteger.valueOf(coordinates.get(i).getY());
-            product = x.multiply(y);
-            nSum = nSum.add(product);
-        }
-        x = BigInteger.valueOf(coordinates.get(0).getX());
-        y = BigInteger.valueOf(coordinates.get(coordinates.size()-1).getY());
-        product = x.multiply(y);
-        nSum = nSum.add(product);
-
-        BigInteger abs = pSum.subtract(nSum).abs();
-        return abs.divide(BigInteger.valueOf(2));
     }
     private List<Coordinates> convertInstructionsToVertexCoords(List<Instruction> instructions){
         List<Coordinates> coordinates = new ArrayList<>();
