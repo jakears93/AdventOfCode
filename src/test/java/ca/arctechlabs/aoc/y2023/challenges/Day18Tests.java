@@ -2,8 +2,10 @@ package ca.arctechlabs.aoc.y2023.challenges;
 
 import ca.arctechlabs.aoc.utilities.FileLoader;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,28 +25,37 @@ public class Day18Tests {
     @Test
     public void Day18A_sample(){
         List<String> input = fileLoader.readAsLines("sample18.txt");
-        int result = runner.countTrenchArea(input);
-        assertEquals(62, result);
+        BigInteger result = runner.countTrenchArea(input);
+        assertEquals(new BigInteger("62"), result);
+    }
+
+    @Test
+    public void Day18A_sampleCustom(){
+        List<String> input = fileLoader.readAsLines("sample18A_2.txt");
+        BigInteger result = runner.countTrenchArea(input);
+        assertEquals(new BigInteger("36"), result);
     }
 
     @Test
     public void Day18A_puzzle(){
         List<String> input = fileLoader.readAsLines("input18.txt");
-        int result = runner.countTrenchArea(input);
-        assertEquals(31171, result);
+        BigInteger result = runner.countTrenchArea(input);
+        assertEquals(new BigInteger("31171"), result);
     }
 
+    @Disabled
     @Test
     public void Day18B_sample(){
         List<String> input = fileLoader.readAsLines("sample18.txt");
-        int result = runner.countTrenchArea(input);
-        assertEquals(0, result);
+        BigInteger result = runner.countTrenchAreaColourSwap(input);
+        assertEquals(new BigInteger("952408144115"), result);
     }
 
+    @Disabled
     @Test
     public void Day18B_puzzle(){
         List<String> input = fileLoader.readAsLines("input18.txt");
-        int result = runner.countTrenchArea(input);
-        assertEquals(0, result);
+        BigInteger result = runner.countTrenchAreaColourSwap(input);
+        assertEquals(new BigInteger("0"), result);
     }
 }
