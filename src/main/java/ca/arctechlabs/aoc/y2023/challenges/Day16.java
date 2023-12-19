@@ -231,8 +231,6 @@ public class Day16 {
 
     }
 
-    private record Instruction(Coordinates coords, Direction direction) {
-
-    }
+    private record Instruction(Coordinates coords, Direction direction) {}
 
 }
