@@ -1,6 +1,9 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Day15 {
 

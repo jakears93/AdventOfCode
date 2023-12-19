@@ -1,89 +1,65 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.utilities.Utils;
-import ca.arctechlabs.aoc.y2023.models.*;
+import ca.arctechlabs.aoc.common.utilities.Utils;
+import ca.arctechlabs.aoc.common.models.Coordinates;
+import ca.arctechlabs.aoc.common.models.Direction;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 //https://adventofcode.com/2023/day/10
 public class Day10 {
 
-    private PipeMaze pipeMaze;
-    private PipeDirection initialHeading;
-
-    public long lengthOfLoop(){
-        List<Direction> path = createPath();
+    public long perimeterOfLoop(List<String> input){
+        PipeMaze pipeMaze = generateMaze(input);
+        List<Coordinates> path = createPath(pipeMaze);
         return path.size();
     }
 
-    public BigInteger areaInsideLoop(){
-        List<Direction> path = createPath();
-        List<Coordinates> vertices = createVerticesFromPath(path);
-        BigInteger area = Utils.calculateAreaFromVerticies(vertices);
+    public BigInteger areaInsideLoop(List<String> input){
+        PipeMaze pipeMaze = generateMaze(input);
+        List<Coordinates> path = createPath(pipeMaze);
+        List<Coordinates> vertices = calculateVertices(path, pipeMaze);
+        BigInteger area = Utils.calculateAreaFromVertices(vertices);
         return area.add(BigInteger.ONE).subtract(BigInteger.valueOf(path.size()).divide(BigInteger.TWO));
     }
 
-    private List<Coordinates> createVerticesFromPath(List<Direction> path) {
+    private List<Coordinates> calculateVertices(List<Coordinates> path, PipeMaze pipeMaze) {
         List<Coordinates> verticies = new ArrayList<>();
-        Coordinates current = new Coordinates(0,0);
-        Coordinates nextCoords;
-        Coordinates delta;
-        PipeDirection heading = PipeDirection.EAST;
-        Direction lastDirection;
-        for(int i=1; i<path.size(); i++){
-            lastDirection = path.get(i);
-            int steps = 1;
-            while(lastDirection.equals(Direction.STRAIGHT) && i<path.size()-1){
-                lastDirection = path.get(++i);
-                steps++;
-            }
-            if(i==path.size()-1) steps++;
-            delta = getDelta(heading);
-            heading = nextHeading(heading, lastDirection);
-            nextCoords = new Coordinates(current.getX() + (steps*delta.getX()), current.getY() + (steps*delta.getY()));
-            verticies.add(nextCoords);
-            current = nextCoords;
+        //check if start is vertex
+        boolean startIsVertex = true;
+        Coordinates c1 = path.get(1);
+        Coordinates c2 = path.get(path.size()-1);
+        if(c1.getX() - c2.getX() == 0 || c1.getY() - c2.getY() == 0){
+            startIsVertex = false;
+        }
+        List<Pipe> vertexPipes = List.of(Pipe.SW, Pipe.SE, Pipe.NE, Pipe.NW);
+        Pipe pipe;
+        for(Coordinates c : path){
+            pipe = pipeMaze.getMaze().get(c.getY()).get(c.getX());
+            if(vertexPipes.contains(pipe)) verticies.add(c);
+        }
+
+        if(startIsVertex){
+            verticies.add(path.get(0));
         }
         return verticies;
     }
-
-    private PipeDirection nextHeading(PipeDirection heading, Direction lastDirection) {
-        if(heading.equals(PipeDirection.NORTH) && lastDirection.equals(Direction.LEFT)) return PipeDirection.WEST;
-        else if(heading.equals(PipeDirection.NORTH) && lastDirection.equals(Direction.RIGHT)) return PipeDirection.EAST;
-
-        else if(heading.equals(PipeDirection.SOUTH) && lastDirection.equals(Direction.LEFT)) return PipeDirection.EAST;
-        else if(heading.equals(PipeDirection.SOUTH) && lastDirection.equals(Direction.RIGHT)) return PipeDirection.WEST;
-
-        else if(heading.equals(PipeDirection.EAST) && lastDirection.equals(Direction.LEFT)) return PipeDirection.NORTH;
-        else if(heading.equals(PipeDirection.EAST) && lastDirection.equals(Direction.RIGHT)) return PipeDirection.SOUTH;
-
-        else if(heading.equals(PipeDirection.WEST) && lastDirection.equals(Direction.LEFT)) return PipeDirection.SOUTH;
-        else if(heading.equals(PipeDirection.WEST) && lastDirection.equals(Direction.RIGHT)) return PipeDirection.NORTH;
-        else return PipeDirection.INVALID;
-    }
-
-    private Coordinates getDelta(PipeDirection heading) {
-        if(heading.equals(PipeDirection.NORTH)) return new Coordinates(0,-1);
-        else if(heading.equals(PipeDirection.SOUTH)) return new Coordinates(0,1);
-        else if(heading.equals(PipeDirection.EAST)) return new Coordinates(1,0);
-        else if(heading.equals(PipeDirection.WEST)) return new Coordinates(-1,0);
-        else return new Coordinates(0,0);
-    }
-
-    private List<Direction> createPath(){
-        List<Direction> directions = new ArrayList<>();
+    private List<Coordinates> createPath(PipeMaze pipeMaze){
+        List<Coordinates> coordinates = new ArrayList<>();
         int x;
         int y;
-        PipeDirection heading;
+        Direction heading;
 
-        for(PipeDirection direction: PipeDirection.values()){
-            x = this.pipeMaze.getStartX();
-            y = this.pipeMaze.getStartY();
-            directions.add(Direction.STRAIGHT);
+        for(Direction direction: Direction.values()){
+            x = pipeMaze.getStartX();
+            y = pipeMaze.getStartY();
+            coordinates.add(new Coordinates(x, y));
             heading = direction;
-            PipeDirection nextHeading;
-            Pipe nextPipe = getNextPipe(x, y, heading);
+            Direction nextHeading;
+            Pipe nextPipe = getNextPipe(x, y, heading, pipeMaze);
 
             while(true){
                 //End Path is nextPipe is the origin
@@ -92,12 +68,12 @@ public class Day10 {
                 }
                 //Reset Path and start at next direction if invalid pipe or null
                 if(Pipe.INVALID.equals(nextPipe) || Objects.isNull(nextPipe)){
-                    directions.clear();
+                    coordinates.clear();
                     break;
                 }
-                x += heading.getxMovement();
-                y += heading.getyMovement();
-                PipeDirection complement = getComplement(heading);
+                x += heading.getDeltaX();
+                y += heading.getDeltaY();
+                Direction complement = getComplement(heading);
 
                 if(nextPipe.getEntry().equals(complement)){
                     nextHeading = nextPipe.getExit();
@@ -106,99 +82,60 @@ public class Day10 {
                     nextHeading = nextPipe.getEntry();
                 }
 
-                directions.add(calculateDirection(heading, nextHeading));
+                coordinates.add(new Coordinates(x, y));
                 heading = nextHeading;
-                nextPipe = getNextPipe(x, y, heading);
+                nextPipe = getNextPipe(x, y, heading, pipeMaze);
             }
             if(Pipe.START.equals(nextPipe)){
-                this.initialHeading = direction;
                 break;
             }
         }
-        return directions;
+        return coordinates;
     }
-    private Direction calculateDirection(PipeDirection heading, PipeDirection nextHeading){
-        //if heading north, exit east: right, exit west: left, else straight
-        //if heading south, exit east: left, exit west: right, else straight
-        //if heading east, exit north: left, exit south: right, else straight
-        //if heading west, exit north: right, exit south: left, else straight
-        Direction direction = Direction.STRAIGHT;
-        if(PipeDirection.NORTH.equals(heading)){
-            if(PipeDirection.EAST.equals(nextHeading)){
-                direction = Direction.RIGHT;
-            }
-            else if(PipeDirection.WEST.equals(nextHeading)){
-                direction = Direction.LEFT;
-            }
-        }
-        else if(PipeDirection.SOUTH.equals(heading)){
-            if(PipeDirection.EAST.equals(nextHeading)){
-                direction = Direction.LEFT;
-            }
-            else if(PipeDirection.WEST.equals(nextHeading)){
-                direction = Direction.RIGHT;
-            }
-        }
-        else if(PipeDirection.EAST.equals(heading)){
-            if(PipeDirection.NORTH.equals(nextHeading)){
-                direction = Direction.LEFT;
-            }
-            else if(PipeDirection.SOUTH.equals(nextHeading)){
-                direction = Direction.RIGHT;
-            }
-        }
-        else if(PipeDirection.WEST.equals(heading)){
-            if(PipeDirection.NORTH.equals(nextHeading)){
-                direction = Direction.RIGHT;
-            }
-            else if(PipeDirection.SOUTH.equals(nextHeading)){
-                direction = Direction.LEFT;
-            }
-        }
 
-        return direction;
-    }
-    private PipeDirection getComplement(PipeDirection heading){
-        if(PipeDirection.NORTH.equals(heading)){
-            return PipeDirection.SOUTH;
+    private Direction getComplement(Direction heading){
+        if(Direction.NORTH.equals(heading)){
+            return Direction.SOUTH;
         }
-        if(PipeDirection.SOUTH.equals(heading)){
-            return PipeDirection.NORTH;
+        if(Direction.SOUTH.equals(heading)){
+            return Direction.NORTH;
         }
-        if(PipeDirection.WEST.equals(heading)){
-            return PipeDirection.EAST;
+        if(Direction.WEST.equals(heading)){
+            return Direction.EAST;
         }
         else{
-            return PipeDirection.WEST;
+            return Direction.WEST;
         }
     }
-    private Pipe getNextPipe(int x, int y, PipeDirection heading){
+    private Pipe getNextPipe(int x, int y, Direction heading, PipeMaze pipeMaze){
         Pipe nextPipe = null;
-        Location[][] maze = this.pipeMaze.getMaze();
+        List<List<Pipe>> maze = pipeMaze.getMaze();
+        int maxHeight = maze.size();
+        int maxWidth = maze.get(0).size();
         //Go North
-        if(y-1 >= 0  && PipeDirection.NORTH.equals(heading)){
-            Pipe northPipe = maze[y-1][x].getPipe();
+        if(y-1 >= 0  && Direction.NORTH.equals(heading)){
+            Pipe northPipe = maze.get(y-1).get(x);
             if(Pipe.NS.equals(northPipe) || Pipe.SW.equals(northPipe) || Pipe.SE.equals(northPipe) || Pipe.START.equals(northPipe)){
                 nextPipe = northPipe;
             }
         }
         //Go South
-        else if(this.pipeMaze.getMazeHeight() > y+1 && PipeDirection.SOUTH.equals(heading)){
-            Pipe southPipe = maze[y+1][x].getPipe();
+        else if(maxHeight > y+1 && Direction.SOUTH.equals(heading)){
+            Pipe southPipe = maze.get(y+1).get(x);
             if(Pipe.NS.equals(southPipe) || Pipe.NW.equals(southPipe) || Pipe.NE.equals(southPipe) || Pipe.START.equals(southPipe)){
                 nextPipe = southPipe;
             }
         }
         //Go East
-        else if(this.pipeMaze.getMazeWidth() > x+1 && PipeDirection.EAST.equals(heading)){
-            Pipe eastPipe = maze[y][x+1].getPipe();
+        else if(maxWidth > x+1 && Direction.EAST.equals(heading)){
+            Pipe eastPipe = maze.get(y).get(x+1);
             if(Pipe.EW.equals(eastPipe) || Pipe.NW.equals(eastPipe) || Pipe.SW.equals(eastPipe) || Pipe.START.equals(eastPipe)){
                 nextPipe = eastPipe;
             }
         }
         //Go West
-        else if(x-1 >= 0 && PipeDirection.WEST.equals(heading)){
-            Pipe westPipe = maze[y][x-1].getPipe();
+        else if(x-1 >= 0 && Direction.WEST.equals(heading)){
+            Pipe westPipe = maze.get(y).get(x-1);
             if(Pipe.EW.equals(westPipe) || Pipe.NE.equals(westPipe) || Pipe.SE.equals(westPipe) || Pipe.START.equals(westPipe)){
                 nextPipe = westPipe;
             }
@@ -206,29 +143,86 @@ public class Day10 {
 
         return nextPipe;
     }
-    public void populateMaze(List<String> input){
-        PipeMaze pipeMaze = new PipeMaze(input.size(), input.get(0).length());
+    private PipeMaze generateMaze(List<String> input){
+        PipeMaze pipeMaze = new PipeMaze();
+        List<List<Pipe>> maze = pipeMaze.getMaze();
         
         for(int y=0; y<input.size(); y++){
-            Location[] mappedRow = mapRow(input.get(y));
-            if(Objects.isNull(pipeMaze.getStartX())){
-                for(int x=0; x< mappedRow.length; x++){
-                    if(Pipe.START.equals(mappedRow[x].getPipe())){
-                        pipeMaze.setStartCoordinates(x, y);
-                    }
+            String line = input.get(y);
+            List<Pipe> row = new ArrayList<>();
+            for(int x=0; x< line.length(); x++){
+                row.add(Pipe.fromValue(line.charAt(x)));
+                if(Pipe.START.equals(row.get(x))){
+                    pipeMaze.setStartCoordinates(x, y);
                 }
             }
-            pipeMaze.addRowToMaze(mappedRow, y);
+            maze.add(row);
         }
-        
-        this.pipeMaze = pipeMaze;
+        return pipeMaze;
     }
-    private Location[] mapRow(String rawRow){
-        char[] row = rawRow.toCharArray();
-        Location[] mappedRow = new Location[row.length];
-        for(int i=0; i<row.length; i++){
-            mappedRow[i] = new Location(Pipe.fromValue(row[i]));
+
+    private enum Pipe {
+        NS('|', Direction.NORTH, Direction.SOUTH),
+        EW('-', Direction.EAST, Direction.WEST),
+        NE('L', Direction.NORTH, Direction.EAST),
+        NW('J', Direction.NORTH, Direction.WEST),
+        SW('7', Direction.SOUTH, Direction.WEST),
+        SE('F', Direction.SOUTH, Direction.EAST),
+        INVALID('.', Direction.INVALID, Direction.INVALID),
+        START('S', Direction.INVALID, Direction.INVALID);
+
+
+        private final char value;
+        private final Direction entry;
+        private final Direction exit;
+
+        Pipe(char value, Direction entry, Direction exit) {
+            this.value = value;
+            this.entry = entry;
+            this.exit = exit;
         }
-        return mappedRow;
+
+        public static Pipe fromValue(char value){
+            for (Pipe b : values()) {
+                if (b.value == value) {
+                    return b;
+                }
+            }
+            return INVALID;
+        }
+        public Direction getEntry() {
+            return entry;
+        }
+
+        public Direction getExit() {
+            return exit;
+        }
+    }
+    private static class PipeMaze {
+        private final List<List<Pipe>> maze;
+        private Integer startX;
+        private Integer startY;
+
+        public PipeMaze() {
+            this.maze = new ArrayList<>();
+        }
+
+        public Integer getStartX() {
+            return startX;
+        }
+
+        public Integer getStartY() {
+            return startY;
+        }
+
+        public void setStartCoordinates(int startX, int startY) {
+            this.startX = startX;
+            this.startY = startY;
+        }
+
+        public List<List<Pipe>> getMaze() {
+            return maze;
+        }
+
     }
 }

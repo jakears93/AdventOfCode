@@ -1,6 +1,7 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.y2023.models.Coordinates;
+import ca.arctechlabs.aoc.common.models.Coordinates;
+import ca.arctechlabs.aoc.common.models.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,29 +65,8 @@ public class Day16 {
         return sum;
     }
 
-    private void printTileMap(boolean showIlluminated){
-        StringBuilder sb = new StringBuilder();
-        for(List<Tile> row : this.tileMap){
-            for(Tile tile : row){
-                if(showIlluminated){
-                    if(tile.isIlluminated()){
-                        sb.append("#");
-                    }
-                    else{
-                        sb.append(".");
-                    }
-                }
-                else{
-                    sb.append(tile.getType().value);
-                }
-            }
-            sb.append("\n");
-        }
-        System.out.println(sb);
-    }
-
     private void followBeam(Coordinates origin, Instruction instruction){
-        Coordinates currentCoords = new Coordinates(origin.getX() + instruction.getCoords().getX(), origin.getY() + instruction.getCoords().getY());
+        Coordinates currentCoords = new Coordinates(origin.getX() + instruction.coords().getX(), origin.getY() + instruction.coords().getY());
         Tile currentTile = getNextTile(currentCoords);
         if(currentTile == null) return;
         currentTile.setIlluminated(true);
@@ -105,7 +85,7 @@ public class Day16 {
         return this.tileMap.get((int)currentCoords.getY()).get((int)currentCoords.getX());
     }
 
-    public List<Instruction> getNextInstructions(Tile tile, Direction direction){
+    private List<Instruction> getNextInstructions(Tile tile, Direction direction){
         List<Instruction> nextInstructions = new ArrayList<>();
         //If Tile has already been visited from this direction, return empty list
         if(!tile.addVisitedDirection(direction)) return nextInstructions;
@@ -194,22 +174,14 @@ public class Day16 {
         return tileMap;
     }
 
-
-    public enum Direction{
-        NORTH,
-        SOUTH,
-        EAST,
-        WEST
-    }
-
-    public enum TileType{
+    private enum TileType{
         EMPTY("."),
         MIRROR_RIGHT("/"),
         MIRROR_LEFT("\\"),
         SPLITTER_H("-"),
         SPLITTER_V("|");
 
-        private String value;
+        private final String value;
 
         TileType(String value) {
             this.value = value;
@@ -223,7 +195,7 @@ public class Day16 {
         }
     }
 
-    public class Tile{
+    private static class Tile{
         private final TileType type;
         private boolean isIlluminated;
         private final List<Direction> visitedDirections;
@@ -257,31 +229,10 @@ public class Day16 {
             return type.value;
         }
 
-        public String toIlluminatedString(){
-            if(this.isIlluminated){
-                return "#";
-            }
-            return type.value;
-        }
-
     }
 
-    public class Instruction{
-        private Coordinates coords;
-        private Direction direction;
+    private record Instruction(Coordinates coords, Direction direction) {
 
-        public Instruction(Coordinates coords, Direction direction) {
-            this.coords = coords;
-            this.direction = direction;
-        }
-
-        public Coordinates getCoords() {
-            return coords;
-        }
-
-        public Direction getDirection() {
-            return direction;
-        }
     }
 
 }

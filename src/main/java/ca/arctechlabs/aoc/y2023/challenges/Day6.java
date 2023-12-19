@@ -1,7 +1,5 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.y2023.models.Race;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,5 +53,30 @@ public class Day6 {
                 .reduce("", (a,b) -> a+b);
 
         return new Race(Long.parseLong(timeString), Long.parseLong(distanceString));
+    }
+
+    private static class Race {
+        private final long timeInMs;
+        private final long distanceInMm;
+        public Race(long timeInMs, long distanceInMm) {
+            this.timeInMs = timeInMs;
+            this.distanceInMm = distanceInMm;
+        }
+
+        public long getTimeInMs() {
+            return timeInMs;
+        }
+
+        public long getDistanceInMm() {
+            return distanceInMm;
+        }
+
+        @Override
+        public String toString() {
+            return "Race{" +
+                    "timeInMs=" + timeInMs +
+                    ", distanceInMm=" + distanceInMm +
+                    '}';
+        }
     }
 }

@@ -1,7 +1,5 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.y2023.models.LotteryCard;
-
 import java.util.*;
 
 public class Day4 {
@@ -14,11 +12,10 @@ public class Day4 {
             numOfCardsMap.put(lotteryCard.getId(), 1);
         }
 
-        for(int i = 0; i< lotteryCards.size(); i++){
-            LotteryCard lotteryCard = lotteryCards.get(i);
+        for (LotteryCard lotteryCard : lotteryCards) {
             int score = calculateWin(lotteryCard);
-            for(int k=1; k<=score; k++){
-                numOfCardsMap.put(lotteryCard.getId()+k, numOfCardsMap.get(lotteryCard.getId()+k) + numOfCardsMap.get(lotteryCard.getId()));
+            for (int k = 1; k <= score; k++) {
+                numOfCardsMap.put(lotteryCard.getId() + k, numOfCardsMap.get(lotteryCard.getId() + k) + numOfCardsMap.get(lotteryCard.getId()));
             }
         }
 
@@ -45,7 +42,7 @@ public class Day4 {
         return score;
     }
 
-    public LotteryCard populateCard(String data){
+    private LotteryCard populateCard(String data){
         LotteryCard lotteryCard = new LotteryCard();
         String cardId = data.split(":")[0].split("Card ")[1];
         lotteryCard.setId(Integer.parseInt(cardId.trim()));
@@ -69,4 +66,42 @@ public class Day4 {
         return lotteryCard;
     }
 
+    private static class LotteryCard {
+        private int id;
+        private Set<Integer> myNumbers;
+        private Set<Integer> winningNumbers;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public Set<Integer> getMyNumbers() {
+            return myNumbers;
+        }
+
+        public void setMyNumbers(Set<Integer> myNumbers) {
+            this.myNumbers = myNumbers;
+        }
+
+        public Set<Integer> getWinningNumbers() {
+            return winningNumbers;
+        }
+
+        public void setWinningNumbers(Set<Integer> winningNumbers) {
+            this.winningNumbers = winningNumbers;
+        }
+
+        @Override
+        public String toString() {
+            return "Card{" +
+                    "id=" + id +
+                    ", myNumbers=" + myNumbers +
+                    ", winningNumbers=" + winningNumbers +
+                    '}';
+        }
+    }
 }

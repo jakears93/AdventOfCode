@@ -1,6 +1,9 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class Day1 {
     //https://adventofcode.com/2023/day/1

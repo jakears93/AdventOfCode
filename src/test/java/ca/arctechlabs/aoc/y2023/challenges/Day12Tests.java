@@ -1,6 +1,6 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.utilities.FileLoader;
+import ca.arctechlabs.aoc.common.utilities.FileLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

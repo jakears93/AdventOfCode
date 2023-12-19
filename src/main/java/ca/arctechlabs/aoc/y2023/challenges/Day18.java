@@ -1,7 +1,8 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.utilities.Utils;
-import ca.arctechlabs.aoc.y2023.models.Coordinates;
+import ca.arctechlabs.aoc.common.utilities.Utils;
+import ca.arctechlabs.aoc.common.models.Coordinates;
+import ca.arctechlabs.aoc.common.models.Direction;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -12,14 +13,14 @@ public class Day18 {
         List<Instruction> instructions = parseInstructions(input);
         List<Coordinates> coordinates = convertInstructionsToVertexCoords(instructions);
         BigInteger perimeter = BigInteger.valueOf(countPerimeter(instructions));
-        return Utils.calculateAreaFromVerticies(coordinates).add(perimeter.divide(BigInteger.TWO).add(BigInteger.ONE));
+        return Utils.calculateAreaFromVertices(coordinates).add(perimeter.divide(BigInteger.TWO).add(BigInteger.ONE));
     }
 
     public BigInteger countTrenchAreaColourSwap(List<String> input){
         List<Instruction> instructions = parseColoursAsInstructions(input);
         List<Coordinates> coordinates = convertInstructionsToVertexCoords(instructions);
         BigInteger perimeter = BigInteger.valueOf(countPerimeter(instructions));
-        return Utils.calculateAreaFromVerticies(coordinates).add(perimeter.divide(BigInteger.TWO).add(BigInteger.ONE));
+        return Utils.calculateAreaFromVertices(coordinates).add(perimeter.divide(BigInteger.TWO).add(BigInteger.ONE));
     }
     private long countPerimeter(List<Instruction> instructions){
         return instructions.stream().mapToLong(Instruction::getSteps).sum();
@@ -30,24 +31,13 @@ public class Day18 {
         Coordinates nextCoords;
         Coordinates delta;
         for(Instruction instruction : instructions){
-            delta = getDelta(instruction.getDirection());
+            delta = new Coordinates(instruction.getDirection().getDeltaX(), instruction.getDirection().getDeltaY());
             int steps = instruction.getSteps();
             nextCoords = new Coordinates(current.getX() + (steps*delta.getX()), current.getY() + (steps*delta.getY()));
             coordinates.add(nextCoords);
             current = new Coordinates(nextCoords.getX(), nextCoords.getY());
         }
         return coordinates;
-    }
-    private Coordinates getDelta(Direction direction){
-        Coordinates delta;
-        switch (direction){
-            case U -> delta = new Coordinates(0, -1);
-            case D -> delta = new Coordinates(0, 1);
-            case L -> delta = new Coordinates(-1, 0);
-            case R -> delta = new Coordinates(1, 0);
-            default -> delta = new Coordinates(0,0);
-        }
-        return delta;
     }
     private List<Instruction> parseColoursAsInstructions(List<String> input){
         List<Instruction> instructions = new ArrayList<>();
@@ -62,17 +52,26 @@ public class Day18 {
         return instructions;
     }
     private Direction intToDirection(int num){
-        if(num==0) return Direction.R;
-        else if(num==1) return Direction.D;
-        else if(num==2) return Direction.L;
-        else return Direction.U;
+        if(num==0) return Direction.EAST;
+        else if(num==1) return Direction.SOUTH;
+        else if(num==2) return Direction.WEST;
+        else return Direction.NORTH;
+    }
+
+    private Direction stringToDirection(String s){
+        return switch (s) {
+            case "R" -> Direction.EAST;
+            case "D" -> Direction.SOUTH;
+            case "L" -> Direction.WEST;
+            default -> Direction.NORTH;
+        };
     }
     private List<Instruction> parseInstructions(List<String> input){
         List<Instruction> instructions = new ArrayList<>();
         for(String row: input){
             Instruction instruction = new Instruction();
             String[] components = row.split(" ");
-            instruction.setDirection(Direction.valueOf(components[0]));
+            instruction.setDirection(stringToDirection(components[0]));
             instruction.setSteps(Integer.parseInt(components[1]));
             instruction.setColour(components[2].substring(1, components[2].length()-1));
             instructions.add(instruction);
@@ -80,14 +79,7 @@ public class Day18 {
         return instructions;
     }
 
-    enum Direction{
-        U,
-        D,
-        L,
-        R;
-    }
-
-    static class Instruction{
+    private static class Instruction{
         private Direction direction;
         private int steps;
         private String colour;

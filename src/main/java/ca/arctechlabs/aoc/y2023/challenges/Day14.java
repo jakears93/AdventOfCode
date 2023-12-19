@@ -1,32 +1,13 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 //https://adventofcode.com/2023/day/14
 public class Day14 {
-
-    public enum Rock{
-        ROUND('O'),
-        SQUARE('#'),
-        EMPTY('.');
-
-        private final char value;
-
-        Rock(char value) {
-            this.value = value;
-        }
-
-        public static Rock fromValue(char c){
-            for(Rock rock : Rock.values()){
-                if(c == rock.value){
-                    return rock;
-                }
-            }
-            throw new IllegalArgumentException("No rock found for value: "+c);
-        }
-    }
-
     public long sumOfNorthLoad(List<String> input){
         List<List<Rock>> platform = parseToPlatform(input);
         rollNorth(platform);
@@ -213,7 +194,6 @@ public class Day14 {
             }
         }
     }
-
     private long calculateNorthLoad(List<List<Rock>> platform){
         long load = 0;
         for(int r=0; r<platform.size(); r++){
@@ -234,5 +214,26 @@ public class Day14 {
             platform.add(row);
         }
         return platform;
+    }
+
+    private enum Rock{
+        ROUND('O'),
+        SQUARE('#'),
+        EMPTY('.');
+
+        private final char value;
+
+        Rock(char value) {
+            this.value = value;
+        }
+
+        public static Rock fromValue(char c){
+            for(Rock rock : Rock.values()){
+                if(c == rock.value){
+                    return rock;
+                }
+            }
+            throw new IllegalArgumentException("No rock found for value: "+c);
+        }
     }
 }

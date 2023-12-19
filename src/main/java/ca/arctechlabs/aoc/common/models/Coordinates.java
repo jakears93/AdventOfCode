@@ -1,4 +1,4 @@
-package ca.arctechlabs.aoc.y2023.models;
+package ca.arctechlabs.aoc.common.models;
 
 public class Coordinates{
     private int x;

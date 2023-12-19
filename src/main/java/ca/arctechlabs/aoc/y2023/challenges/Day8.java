@@ -1,8 +1,7 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.utilities.Utils;
-import ca.arctechlabs.aoc.y2023.models.Node;
-import ca.arctechlabs.aoc.y2023.models.NodeDirection;
+import ca.arctechlabs.aoc.common.utilities.Utils;
+import ca.arctechlabs.aoc.common.models.Turn;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +13,7 @@ public class Day8 {
     //https://adventofcode.com/2023/day/8
 
     public long stepsToTraverseMap(List<String> input, Predicate<String> startRule, Predicate<String> endRule){
-        List<NodeDirection> directions = parseDirections(input.get(0));
+        List<Turn> directions = parseDirections(input.get(0));
         Map<String, Node> nodes = new HashMap<>();
         input.stream()
                 .skip(2)
@@ -25,7 +24,7 @@ public class Day8 {
         return countTotalSteps(directions, nodes, startRule, endRule);
     }
 
-    private long countTotalSteps(List<NodeDirection> directions, Map<String, Node> nodes, Predicate<String> startRule, Predicate<String> endRule){
+    private long countTotalSteps(List<Turn> directions, Map<String, Node> nodes, Predicate<String> startRule, Predicate<String> endRule){
         List<Long> nodePathLengths = new ArrayList<>();
 
         List<Node> currentNodes = nodes.keySet().stream()
@@ -41,16 +40,16 @@ public class Day8 {
         return Utils.calculateLCM(nodePathLengths);
     }
 
-    private long countStepsPerNode(List<NodeDirection> directions, Map<String, Node> nodes, Node startingNode, Predicate<String> endRule){
+    private long countStepsPerNode(List<Turn> directions, Map<String, Node> nodes, Node startingNode, Predicate<String> endRule){
         long totalSteps = 0;
         boolean foundEnd = false;
         Node currentNode = startingNode;
         while (!foundEnd){
-            for(NodeDirection direction : directions) {
+            for(Turn direction : directions) {
                 totalSteps++;
-                if (NodeDirection.LEFT.equals(direction)) {
+                if (Turn.LEFT.equals(direction)) {
                     currentNode = nodes.get(currentNode.getLeft());
-                } else if (NodeDirection.RIGHT.equals(direction)) {
+                } else if (Turn.RIGHT.equals(direction)) {
                     currentNode = nodes.get(currentNode.getRight());
                 }
                 if (endRule.test(currentNode.getName())) {
@@ -74,11 +73,44 @@ public class Day8 {
         return node;
     }
 
-    private List<NodeDirection> parseDirections(String line){
-        List<NodeDirection> directions = new ArrayList<>();
+    private List<Turn> parseDirections(String line){
+        List<Turn> directions = new ArrayList<>();
         for(char c : line.toCharArray()){
-            directions.add(NodeDirection.fromValue(c));
+            directions.add(Turn.fromValue(c));
         }
         return directions;
+    }
+
+    private static class Node {
+        private String name;
+        private String left;
+        private String right;
+
+        public Node() {
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getLeft() {
+            return left;
+        }
+
+        public void setLeft(String left) {
+            this.left = left;
+        }
+
+        public String getRight() {
+            return right;
+        }
+
+        public void setRight(String right) {
+            this.right = right;
+        }
     }
 }

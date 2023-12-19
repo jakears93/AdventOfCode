@@ -1,8 +1,6 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
 
-import ca.arctechlabs.aoc.utilities.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +19,6 @@ public class Day12 {
 
     private long getNumberOfArrangements(SpringData data){
         List<Integer> unknownIndices = new ArrayList<>();
-        long totalCombinations = Utils.combination(data.getInitialUnknown(), data.getTotalDamaged() - data.getInitialDamaged());
-        System.out.println(totalCombinations);
         for(int i=0; i<data.getSequence().size(); i++){
             if(data.getSequence().get(i).equals(Spring.UNKNOWN)) unknownIndices.add(i);
         }
@@ -155,73 +151,57 @@ public class Day12 {
         }
         return result;
     }
-}
 
-class SpringData{
-    private final List<Long> damagedGroups;
-    private final List<Spring> sequence;
-    private final long totalDamaged;
-    private final long initialOperational;
-    private final long initialDamaged;
-    private final long initialUnknown;
+    private static class SpringData{
+        private final List<Long> damagedGroups;
+        private final List<Spring> sequence;
+        private final long totalDamaged;
+        private final long initialDamaged;
 
-    public SpringData(List<Long> damagedGroups, List<Spring> sequence) {
-        this.damagedGroups = damagedGroups;
-        this.sequence = sequence;
-        this.totalDamaged = this.damagedGroups.stream().mapToLong(Long::longValue).sum();
-        this.initialDamaged = this.sequence.stream().filter(Spring.DAMAGED::equals).count();
-        this.initialOperational = this.sequence.stream().filter(Spring.OPERATIONAL::equals).count();
-        this.initialUnknown = this.sequence.stream().filter(Spring.UNKNOWN::equals).count();
-    }
-    public List<Long> getDamagedGroups() {
-        return damagedGroups;
-    }
-    
-    public List<Spring> getSequence() {
-        return sequence;
-    }
-
-    public long getTotalDamaged() {
-        return totalDamaged;
-    }
-
-    public long getInitialOperational() {
-        return initialOperational;
-    }
-
-    public long getInitialDamaged() {
-        return initialDamaged;
-    }
-
-    public long getInitialUnknown() {
-        return initialUnknown;
-    }
-    @Override
-    public String toString() {
-        return "SpringData{" +
-                "damagedGroups=" + damagedGroups +
-                ", sequence=" + sequence +
-                "}\n";
-    }
-}
-
-enum Spring{
-    OPERATIONAL('.'),
-    DAMAGED('#'),
-    UNKNOWN('?');
-
-    private final char value;
-    Spring(char value) {
-        this.value = value;
-    }
-
-    public static Spring fromValue(char c){
-        for(Spring spring: values()){
-            if(c == spring.value){
-                return spring;
-            }
+        public SpringData(List<Long> damagedGroups, List<Spring> sequence) {
+            this.damagedGroups = damagedGroups;
+            this.sequence = sequence;
+            this.totalDamaged = this.damagedGroups.stream().mapToLong(Long::longValue).sum();
+            this.initialDamaged = this.sequence.stream().filter(Spring.DAMAGED::equals).count();
         }
-        throw new IllegalArgumentException("No spring available for value: "+c);
+        public List<Long> getDamagedGroups() {
+            return damagedGroups;
+        }
+        public List<Spring> getSequence() {
+            return sequence;
+        }
+        public long getTotalDamaged() {
+            return totalDamaged;
+        }
+        public long getInitialDamaged() {
+            return initialDamaged;
+        }
+        @Override
+        public String toString() {
+            return "SpringData{" +
+                    "damagedGroups=" + damagedGroups +
+                    ", sequence=" + sequence +
+                    "}\n";
+        }
     }
 
+    private enum Spring{
+        OPERATIONAL('.'),
+        DAMAGED('#'),
+        UNKNOWN('?');
+
+        private final char value;
+        Spring(char value) {
+            this.value = value;
+        }
+
+        public static Spring fromValue(char c){
+            for(Spring spring: values()){
+                if(c == spring.value){
+                    return spring;
+                }
+            }
+            throw new IllegalArgumentException("No spring available for value: "+c);
+        }
+    }
 }

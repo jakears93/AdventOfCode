@@ -1,6 +1,6 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.y2023.models.Coordinates;
+import ca.arctechlabs.aoc.common.models.Coordinates;
 
 import java.util.*;
 

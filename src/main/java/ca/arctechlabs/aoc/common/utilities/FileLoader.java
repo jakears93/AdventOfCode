@@ -1,4 +1,4 @@
-package ca.arctechlabs.aoc.utilities;
+package ca.arctechlabs.aoc.common.utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FileLoader {
@@ -21,8 +20,8 @@ public class FileLoader {
         try (BufferedReader reader = new BufferedReader(new FileReader(getFile(fileName)))) {
             return reader.lines().toList();
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            System.out.println(e.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -32,8 +31,8 @@ public class FileLoader {
             String content = Files.readString(Paths.get(file.toURI()));
             return content.split(separator);
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            System.out.println(e.getMessage());
+            throw new RuntimeException();
         }
     }
 
@@ -42,28 +41,28 @@ public class FileLoader {
         String path = String.format(BASE_PATH, this.year, type.getValue()) + fileName;
         return new File(path);
     }
-}
 
-enum TestType{
-    SAMPLE("sample", "samples"),
-    INPUT("input", "inputs");
+    private enum TestType{
+        SAMPLE("sample", "samples"),
+        INPUT("input", "inputs");
 
-    private final String key;
-    private final String value;
+        private final String key;
+        private final String value;
 
-    TestType(String key, String value) {
-        this.key = key;
-        this.value = value;
-    }
-
-    public static TestType fromFileName(String fileName){
-        for(TestType type : TestType.values()){
-            if(fileName.startsWith(type.key)) return type;
+        TestType(String key, String value) {
+            this.key = key;
+            this.value = value;
         }
-        throw new IllegalArgumentException("Unable to find key for: "+fileName);
-    }
 
-    public String getValue() {
-        return value;
+        public static TestType fromFileName(String fileName){
+            for(TestType type : TestType.values()){
+                if(fileName.startsWith(type.key)) return type;
+            }
+            throw new IllegalArgumentException("Unable to find key for: "+fileName);
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 }

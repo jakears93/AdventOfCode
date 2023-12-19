@@ -1,7 +1,5 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.y2023.models.Gear;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -110,7 +108,7 @@ public class Day3 {
             char[] line = map.get(i);
             for(int j=0; j<line.length; j++){
                 try{
-                    int num = Integer.parseInt(String.valueOf(line[j]));
+                    Integer.parseInt(String.valueOf(line[j]));
                     List<String> adjacent = populateAdjacent(map, i, j);
                     for(String value : adjacent){
                         if(value.matches("[~!@#$%^&*+/=-]")){
@@ -156,5 +154,27 @@ public class Day3 {
             }
         }
         return entry;
+    }
+
+    private static class Gear {
+        private int g1;
+        private int g2;
+        public void setG1(int g1) {
+            this.g1 = g1;
+        }
+        public void setG2(int g2) {
+            this.g2 = g2;
+        }
+        public int getRatio(){
+            return g1*g2;
+        }
+
+        @Override
+        public String toString() {
+            return "Gear{" +
+                    "g1=" + g1 +
+                    ", g2=" + g2 +
+                    '}';
+        }
     }
 }

@@ -1,17 +1,14 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.y2023.models.CamelCard;
-import ca.arctechlabs.aoc.y2023.models.CamelCardHand;
-import ca.arctechlabs.aoc.y2023.models.HandType;
-
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 public class Day7 {
     //https://adventofcode.com/2023/day/7
     public long totalWinnings(List<String> input, boolean wildcardsEnabled){
-        HandComparator comparator = new HandComparator();
-
         List<CamelCardHand> sortedHands = input.stream()
                 .map(line -> this.parseHand(line, wildcardsEnabled))
                 .toList()
@@ -104,4 +101,104 @@ public class Day7 {
             return 0;
         }
     }
+    private enum HandType {
+        FIVE_OF_A_KIND(7),
+        FOUR_OF_A_KIND(6),
+        FULL_HOUSE(5),
+        THREE_OF_A_KIND(4),
+        TWO_PAIR(3),
+        ONE_PAIR(2),
+        HIGH_CARD(1),
+        INVALID(0);
+
+        private final int value;
+
+        HandType(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+    private static class CamelCardHand {
+        private final Map<Integer, CamelCard> hand;
+        private long bid;
+        private HandType handType;
+
+        public CamelCardHand() {
+            this.hand = new HashMap<>();
+        }
+
+        public void addToHand(Integer index, CamelCard value){
+            this.hand.put(index, value);
+        }
+
+        public CamelCard getFromHand(Integer index){
+            return this.hand.get(index);
+        }
+
+        public Map<Integer, CamelCard> getHand() {
+            return hand;
+        }
+
+        public long getBid() {
+            return bid;
+        }
+
+        public void setBid(long bid) {
+            this.bid = bid;
+        }
+
+        public HandType getHandType() {
+            return handType;
+        }
+
+        public void setHandType(HandType handType) {
+            this.handType = handType;
+        }
+    }
+    private enum CamelCard {
+        C_2('2', 2),
+        C_3('3', 3),
+        C_4('4', 4),
+        C_5('5', 5),
+        C_6('6', 6),
+        C_7('7', 7),
+        C_8('8', 8),
+        C_9('9', 9),
+        C_T('T', 10),
+        C_J('J', 11),
+        C_Q('Q', 12),
+        C_K('K', 13),
+        C_A('A', 14),
+        C_JOKER('W', 1);
+
+
+        private final char name;
+        private final int strength;
+        CamelCard(char name, int strength) {
+            this.name = name;
+            this.strength = strength;
+        }
+
+        public static CamelCard fromName(char name) {
+            for (CamelCard b : values()) {
+                if (b.name == name) {
+                    return b;
+                }
+            }
+            throw new IllegalArgumentException("Unexpected Camel Card name '" + name + "'");
+        }
+
+        public int getStrength() {
+            return strength;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(name);
+        }
+    }
+
 }

@@ -1,8 +1,5 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-import ca.arctechlabs.aoc.y2023.models.AttributeMapping;
-import ca.arctechlabs.aoc.y2023.models.SeedInfo;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -136,5 +133,101 @@ public class Day5 {
             }
         }
         return value;
+    }
+
+    private static class AttributeMapping {
+        private final long destinationStart;
+        private final long sourceStart;
+        private final long range;
+
+        public AttributeMapping(long destinationStart, long sourceStart, long range) {
+            this.destinationStart = destinationStart;
+            this.sourceStart = sourceStart;
+            this.range = range;
+        }
+        public long getSourceStart() {
+            return sourceStart;
+        }
+        public long getDestinationStart() {
+            return destinationStart;
+        }
+        public long getRange() {
+            return range;
+        }
+    }
+
+    private static class SeedInfo {
+        private final Long id;
+        private Long soil;
+        private Long fertilizer;
+        private Long water;
+        private Long light;
+        private Long temperature;
+        private Long humidity;
+        private Long location;
+
+        public SeedInfo(Long id) {
+            this.id = id;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public Long getSoil() {
+            return soil;
+        }
+
+        public void setSoil(Long soil) {
+            this.soil = soil;
+        }
+
+        public Long getFertilizer() {
+            return fertilizer;
+        }
+
+        public void setFertilizer(Long fertilizer) {
+            this.fertilizer = fertilizer;
+        }
+
+        public Long getWater() {
+            return water;
+        }
+
+        public void setWater(Long water) {
+            this.water = water;
+        }
+
+        public Long getLight() {
+            return light;
+        }
+
+        public void setLight(Long light) {
+            this.light = light;
+        }
+
+        public Long getTemperature() {
+            return temperature;
+        }
+
+        public void setTemperature(Long temperature) {
+            this.temperature = temperature;
+        }
+
+        public Long getHumidity() {
+            return humidity;
+        }
+
+        public void setHumidity(Long humidity) {
+            this.humidity = humidity;
+        }
+
+        public Long getLocation() {
+            return location;
+        }
+
+        public void setLocation(Long location) {
+            this.location = location;
+        }
     }
 }

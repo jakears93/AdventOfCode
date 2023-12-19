@@ -1,6 +1,6 @@
-package ca.arctechlabs.aoc.utilities;
+package ca.arctechlabs.aoc.common.utilities;
 
-import ca.arctechlabs.aoc.y2023.models.Coordinates;
+import ca.arctechlabs.aoc.common.models.Coordinates;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -88,33 +88,33 @@ public class Utils {
         return result;
     }
 
-    public static BigInteger calculateAreaFromVerticies(List<Coordinates> verticies){
-        if(verticies.isEmpty()) return BigInteger.ZERO;
+    public static BigInteger calculateAreaFromVertices(List<Coordinates> vertices){
+        if(vertices.isEmpty()) return BigInteger.ZERO;
 
         BigInteger pSum = new BigInteger(String.valueOf(0L));
         BigInteger nSum = new BigInteger(String.valueOf(0L));
         BigInteger x;
         BigInteger y;
         BigInteger product;
-        for(int i=0; i<verticies.size()-1; i++){
-            x = BigInteger.valueOf(verticies.get(i).getX());
-            y = BigInteger.valueOf(verticies.get(i+1).getY());
+        for(int i=0; i<vertices.size()-1; i++){
+            x = BigInteger.valueOf(vertices.get(i).getX());
+            y = BigInteger.valueOf(vertices.get(i+1).getY());
             product = x.multiply(y);
             pSum = pSum.add(product);
         }
-        x = BigInteger.valueOf(verticies.get(verticies.size()-1).getX());
-        y = BigInteger.valueOf(verticies.get(0).getY());
+        x = BigInteger.valueOf(vertices.get(vertices.size()-1).getX());
+        y = BigInteger.valueOf(vertices.get(0).getY());
         product = x.multiply(y);
         pSum = pSum.add(product);
 
-        for(int i=0; i<verticies.size()-1; i++){
-            x = BigInteger.valueOf(verticies.get(i+1).getX());
-            y = BigInteger.valueOf(verticies.get(i).getY());
+        for(int i=0; i<vertices.size()-1; i++){
+            x = BigInteger.valueOf(vertices.get(i+1).getX());
+            y = BigInteger.valueOf(vertices.get(i).getY());
             product = x.multiply(y);
             nSum = nSum.add(product);
         }
-        x = BigInteger.valueOf(verticies.get(0).getX());
-        y = BigInteger.valueOf(verticies.get(verticies.size()-1).getY());
+        x = BigInteger.valueOf(vertices.get(0).getX());
+        y = BigInteger.valueOf(vertices.get(vertices.size()-1).getY());
         product = x.multiply(y);
         nSum = nSum.add(product);
 

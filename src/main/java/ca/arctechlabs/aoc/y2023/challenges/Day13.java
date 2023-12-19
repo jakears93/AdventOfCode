@@ -40,11 +40,11 @@ public class Day13 {
 
         bits = convertToColumnBits(partialLines, '#');
         smudgedMirrorIndex = checkIfSmudgedMirror(bits);
-        if(smudgedMirrorIndex != null){
-            return smudgedMirrorIndex;
+        if (smudgedMirrorIndex == null) {
+            return 0L;
         }
+        return smudgedMirrorIndex;
 
-        return 0L;
     }
 
     private Integer checkIfSmudgedMirror(List<Integer> bitMap) {
