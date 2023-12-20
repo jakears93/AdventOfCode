@@ -1,3 +1,5 @@
 Day 5B -> Optimize
 Day 12B -> solve
 Day 17A & B -> solve
+Day 19B -> solve
+Day 20B -> refactor

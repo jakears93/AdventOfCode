@@ -2,6 +2,7 @@ package ca.arctechlabs.aoc.y2023.challenges;
 
 import ca.arctechlabs.aoc.common.utilities.FileLoader;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -35,6 +36,7 @@ public class Day19Tests {
         assertEquals(374873L, result);
     }
 
+    @Disabled
     @Test
     public void Day19B_sample(){
         List<String> input = fileLoader.readAsLines("sample19.txt");
@@ -42,6 +44,7 @@ public class Day19Tests {
         assertEquals(0L, result);
     }
 
+    @Disabled
     @Test
     public void Day19B_puzzle(){
         List<String> input = fileLoader.readAsLines("input19.txt");

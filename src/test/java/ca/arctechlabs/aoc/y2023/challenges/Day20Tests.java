@@ -42,16 +42,9 @@ public class Day20Tests {
     }
 
     @Test
-    public void Day20B_sample(){
-        List<String> input = fileLoader.readAsLines("sample20.txt");
-        long result = runner.productOfDifferentSignals(input, 1000);
-        assertEquals(-1L, result);
-    }
-
-    @Test
     public void Day20B_puzzle(){
         List<String> input = fileLoader.readAsLines("input20.txt");
-        long result = runner.productOfDifferentSignals(input, 1000);
-        assertEquals(-1L, result);
+        long result = runner.buttonPressesUntilGoal(input, "rx", "LOW");
+        assertEquals(233283622908263L, result);
     }
 }
