@@ -1,119 +1,90 @@
 package ca.arctechlabs.aoc.y2023.challenges;
 
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //https://adventofcode.com/2023/day/12
+//Heavily relied on explanation from https://advent-of-code.xavd.id/writeups/2023/day/12/
 public class Day12 {
+
+    private final Map<String, Long> cache = new HashMap<>();
     public long totalArrangements(List<String> input) {
-        List<SpringData> springDataList = parseInput(input);
-        return springDataList.stream().map(this::getNumberOfArrangements).mapToLong(Long::longValue).sum();
+        return totalArrangements(input, 0);
     }
 
     public long totalArrangements(List<String> input, int foldLevel) {
-        List<SpringData> rawSpringDataList = parseInput(input);
-        List<SpringData> springDataList = unFold(rawSpringDataList, foldLevel);
-        return springDataList.stream().map(this::getNumberOfArrangements).mapToLong(Long::longValue).sum();
-    }
-
-    private long getNumberOfArrangements(SpringData data){
-        List<Integer> unknownIndices = new ArrayList<>();
-        for(int i=0; i<data.getSequence().size(); i++){
-            if(data.getSequence().get(i).equals(Spring.UNKNOWN)) unknownIndices.add(i);
+        List<SpringData> springDataList = unFold(parseInput(input), foldLevel);
+        List<Long> arrangements = new ArrayList<>();
+        for(SpringData data : springDataList){
+            arrangements.add(numberOfValidSolutions(data.getSequence(), data.damagedGroups));
         }
 
-        List<List<Spring>> allPossibleSequences = allPossibleSequences(data.getSequence(), unknownIndices, data.getTotalDamaged() - data.getInitialDamaged());
-
-        return allPossibleSequences.stream()
-                .filter(testSeq -> validateArrangement(data, testSeq))
-                .count();
+        return arrangements.stream().mapToLong(Long::longValue).sum();
     }
 
-    List<List<Spring>> allPossibleSequences(List<Spring> baseSequence, List<Integer> unknownIndices, long totalDamagedToPlace){
-        if(totalDamagedToPlace <= 0){
-            return List.of(baseSequence);
-        }
-        List<List<Spring>> allSeq = new ArrayList<>();
-        List<int[]> allReplacements = getAllCombinations(unknownIndices.toArray(new Integer[0]), (int) totalDamagedToPlace);
-
-        for(int[] replacement : allReplacements){
-            allSeq.add(applyReplacements(replacement, baseSequence));
+    private long numberOfValidSolutions(List<Spring> sequence, List<Long> shape){
+        String hash = String.valueOf(sequence.hashCode())+ shape.hashCode();
+        if(this.cache.containsKey(hash)){
+            return this.cache.get(hash);
         }
 
-        return allSeq;
-    }
+        if(sequence.isEmpty()){
+            if(shape.isEmpty()){
+                this.cache.put(hash, 1L);
+                return 1;
+            }
+            this.cache.put(hash, 0L);
+            return 0;
+        }
+        if(shape.isEmpty()){
+            if(sequence.contains(Spring.DAMAGED)){
+                this.cache.put(hash, 0L);
+                return 0;
+            }
+            this.cache.put(hash, 1L);
+            return 1;
+        }
 
-    List<int[]>  getAllCombinations(Integer[] input, int k){
-        List<int[]> subsets = new ArrayList<>();
+        Spring start = sequence.get(0);
+        List<Spring> remainder = sequence.subList(1, sequence.size());
 
-        int[] s = new int[k];                  // here we'll keep indices
-        // pointing to elements in input array
-
-        if (k <= input.length) {
-            // first index sequence: 0, 1, 2, ...
-            for (int i = 0; (s[i] = i) < k - 1; i++);
-            subsets.add(getSubset(input, s));
-            for(;;) {
-                int i;
-                // find position of item that can be incremented
-                for (i = k - 1; i >= 0 && s[i] == input.length - k + i; i--);
-                if (i < 0) {
-                    break;
+        if(Spring.OPERATIONAL.equals(start)){
+            long value = numberOfValidSolutions(remainder, shape);
+            hash = String.valueOf(remainder.hashCode())+ shape.hashCode();
+            this.cache.put(hash, value);
+            return value;
+        }
+        else if(Spring.DAMAGED.equals(start)){
+            long group = shape.get(0);
+            if(sequence.size() >= group
+                && !sequence.subList(0, (int) group).contains(Spring.OPERATIONAL)
+                && (sequence.size() == group || !sequence.get((int) group).equals(Spring.DAMAGED)))
+            {
+                List<Spring> sublist;
+                if(sequence.size() > group){
+                    sublist = sequence.subList((int) (group+1), sequence.size());
                 }
-                s[i]++;                    // increment this item
-                for (++i; i < k; i++) {    // fill up remaining items
-                    s[i] = s[i - 1] + 1;
+                else{
+                    sublist = new ArrayList<>();
                 }
-                subsets.add(getSubset(input, s));
+                long value = numberOfValidSolutions(sublist, shape.subList(1,shape.size()));
+                this.cache.put(hash, value);
+                return value;
             }
+            return 0;
         }
-        return subsets;
-    }
+        else if(Spring.UNKNOWN.equals(start)){
+            List<Spring> list1 = new ArrayList<>(remainder);
+            list1.add(0, Spring.DAMAGED);
 
-    int[] getSubset(Integer[] input, int[] subset) {
-        int[] result = new int[subset.length];
-        for (int i = 0; i < subset.length; i++)
-            result[i] = input[subset[i]];
-        return result;
-    }
-
-    List<Spring> applyReplacements(int[] indices, List<Spring> base){
-        List<Spring> updated = new ArrayList<>(base);
-        for(Integer index : indices){
-            updated.add(index, Spring.DAMAGED);
-            updated.remove(index+1);
+            List<Spring> list2 = new ArrayList<>(remainder);
+            list2.add(0, Spring.OPERATIONAL);
+            return numberOfValidSolutions(list1, shape) + numberOfValidSolutions(list2, shape);
         }
-        return updated;
-    }
 
-    private boolean validateArrangement(SpringData data, List<Spring> testSequence){
-        if(!calculateDamagedGroups(testSequence).equals(data.getDamagedGroups())){
-            return false;
-        }
-        else return testSequence.size() == data.getSequence().size();
-    }
-
-    private List<Long> calculateDamagedGroups(List<Spring> sequence){
-        List<Long> damagedGroups = new ArrayList<>();
-        boolean currentlyDamaged = false;
-        long damagedCount = 0;
-        for(Spring spring : sequence){
-            if(currentlyDamaged && Spring.DAMAGED.equals(spring)){
-                damagedCount++;
-            }
-            else if(!currentlyDamaged && Spring.DAMAGED.equals(spring)){
-                damagedCount++;
-                currentlyDamaged = true;
-            }
-            else if(currentlyDamaged){
-                damagedGroups.add(damagedCount);
-                currentlyDamaged = false;
-                damagedCount = 0L;
-            }
-        }
-        damagedGroups.add(damagedCount);
-        return damagedGroups.stream().filter(v -> v !=0).toList();
+        throw new IllegalArgumentException("Invalid Spring Type: "+start.value);
     }
 
     private List<SpringData> parseInput(List<String> input){
@@ -137,7 +108,11 @@ public class Day12 {
     }
 
     private List<SpringData> unFold(List<SpringData> base, int foldLevel){
-        List<SpringData> result = new ArrayList<>(base.size());
+        if(foldLevel<=1){
+            return base;
+        }
+
+        List<SpringData> result = new ArrayList<>();
         for(SpringData data : base){
             List<Spring> springs = new ArrayList<>(data.getSequence().size()*foldLevel+foldLevel);
             List<Long> damagedGroups = new ArrayList<>(data.getDamagedGroups().size()*foldLevel);
@@ -155,33 +130,16 @@ public class Day12 {
     private static class SpringData{
         private final List<Long> damagedGroups;
         private final List<Spring> sequence;
-        private final long totalDamaged;
-        private final long initialDamaged;
 
         public SpringData(List<Long> damagedGroups, List<Spring> sequence) {
             this.damagedGroups = damagedGroups;
             this.sequence = sequence;
-            this.totalDamaged = this.damagedGroups.stream().mapToLong(Long::longValue).sum();
-            this.initialDamaged = this.sequence.stream().filter(Spring.DAMAGED::equals).count();
         }
         public List<Long> getDamagedGroups() {
             return damagedGroups;
         }
         public List<Spring> getSequence() {
             return sequence;
-        }
-        public long getTotalDamaged() {
-            return totalDamaged;
-        }
-        public long getInitialDamaged() {
-            return initialDamaged;
-        }
-        @Override
-        public String toString() {
-            return "SpringData{" +
-                    "damagedGroups=" + damagedGroups +
-                    ", sequence=" + sequence +
-                    "}\n";
         }
     }
 

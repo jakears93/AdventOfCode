@@ -1,5 +1,7 @@
-Day 5B -> Optimize
-Day 12B -> solve
-Day 17A & B -> solve
-Day 19B -> solve
-Day 20B -> refactor
+Incomplete and Need to Solve:
+    Day 17A & B ->  Some sort of dijkstra algorithm implementation
+    Day 19B -> Should be similar to day 5 solution using ranges and recursively splitting
+
+Optimizations/Refactoring:
+    Day 5B -> Optimize by using ranges instead of brute force
+    Day 20B -> Refactor need as it only works for current goal signal rx-LOW

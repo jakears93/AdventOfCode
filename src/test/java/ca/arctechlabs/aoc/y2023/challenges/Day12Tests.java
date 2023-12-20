@@ -2,7 +2,6 @@ package ca.arctechlabs.aoc.y2023.challenges;
 
 import ca.arctechlabs.aoc.common.utilities.FileLoader;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -35,7 +34,6 @@ public class Day12Tests {
         assertEquals(6488L, result);
     }
 
-    @Disabled
     @Test
     public void Day12B_sample(){
         List<String> input = fileLoader.readAsLines("sample12.txt");
@@ -43,11 +41,10 @@ public class Day12Tests {
         assertEquals(525152L, result);
     }
 
-    @Disabled
     @Test
     public void Day12B_puzzle(){
         List<String> input = fileLoader.readAsLines("input12.txt");
-        long result = runner.totalArrangements(input);
-        assertEquals(0L, result);
+        long result = runner.totalArrangements(input, 5);
+        assertEquals(815364548481L, result);
     }
 }
