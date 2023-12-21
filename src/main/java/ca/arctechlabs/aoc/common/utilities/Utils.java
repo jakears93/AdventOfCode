@@ -121,6 +121,11 @@ public class Utils {
         return abs.divide(BigInteger.valueOf(2));
     }
 
+    public static <T> List<DijkstraNode<T>> dijkstraDistancesFromStart(T start, List<DijkstraNode<T>> allNodes){
+        //Find Start Node
+        DijkstraNode<T> startNode = allNodes.stream().filter(n -> n.getValue().equals(start)).findFirst().orElseThrow();
+        return dijkstraDistancesFromStart(startNode, allNodes);
+    }
     public static <T> List<DijkstraNode<T>> dijkstraDistancesFromStart(DijkstraNode<T> start, List<DijkstraNode<T>> allNodes){
         //Set startNode to 0 distance
         start.setShortestDistanceFromStart(0);
