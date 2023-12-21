@@ -9,18 +9,25 @@ import java.util.List;
 import java.util.Objects;
 
 public class Day21 {
-    public int numberOfReachableGardenPlots(List<String> input, int steps){
+
+    public long numberOfReachableGardenPlots(List<String> input, int steps, boolean isExpandable){
+        if(!isExpandable){
+            return numberOfReachableGardenPlots(input, steps);
+        }
+        return 0;
+    }
+    private long numberOfReachableGardenPlots(List<String> input, int steps){
         List<DijkstraNode<Coordinates>> gardenPlots = parseInputToNodes(input);
         Coordinates start = findStart(input);
         List<DijkstraNode<Coordinates>> trimmedGardenPlots = trimGardenPlots(gardenPlots, start, steps);
         populateNeighbours(trimmedGardenPlots, input.get(0).length(), input.size());
         List<DijkstraNode<Coordinates>> shortestPathsFromStart = Utils.dijkstraDistancesFromStart(start, trimmedGardenPlots);
+        int check = steps%2;
         return shortestPathsFromStart.stream()
                 .filter(node -> node.getShortestDistanceFromStart() <= steps)
                 .filter(node -> node.getShortestDistanceFromStart() >=0)
-                .filter(node -> node.getShortestDistanceFromStart() % 2 == 0)
-                .mapToInt(e -> 1)
-                .sum();
+                .filter(node -> node.getShortestDistanceFromStart() % 2 == check)
+                .count();
     }
 
     private List<DijkstraNode<Coordinates>> trimGardenPlots(List<DijkstraNode<Coordinates>> gardenPlots, Coordinates start, int steps) {
