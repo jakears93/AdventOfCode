@@ -11,16 +11,35 @@ import java.util.Objects;
 public class Day21 {
     public int numberOfReachableGardenPlots(List<String> input, int steps){
         List<DijkstraNode<Coordinates>> gardenPlots = parseInputToNodes(input);
-        populateNeighbours(gardenPlots, input.get(0).length(), input.size());
         Coordinates start = findStart(input);
-
-        List<DijkstraNode<Coordinates>> shortestPathsFromStart = Utils.dijkstraDistancesFromStart(start, gardenPlots);
+        List<DijkstraNode<Coordinates>> trimmedGardenPlots = trimGardenPlots(gardenPlots, start, steps);
+        populateNeighbours(trimmedGardenPlots, input.get(0).length(), input.size());
+        List<DijkstraNode<Coordinates>> shortestPathsFromStart = Utils.dijkstraDistancesFromStart(start, trimmedGardenPlots);
         return shortestPathsFromStart.stream()
                 .filter(node -> node.getShortestDistanceFromStart() <= steps)
+                .filter(node -> node.getShortestDistanceFromStart() >=0)
                 .filter(node -> node.getShortestDistanceFromStart() % 2 == 0)
                 .mapToInt(e -> 1)
                 .sum();
     }
+
+    private List<DijkstraNode<Coordinates>> trimGardenPlots(List<DijkstraNode<Coordinates>> gardenPlots, Coordinates start, int steps) {
+        List<DijkstraNode<Coordinates>> trimmed = new ArrayList<>();
+        List<Coordinates> possibleCoordinates = new ArrayList<>();
+        for(int x=-1*steps; x <= steps; x++){
+            int maxYDistance = steps-Math.abs(x);
+            for(int y=-1*maxYDistance; y<=maxYDistance; y++){
+                possibleCoordinates.add(new Coordinates(start.getX()+x, start.getY()+y));
+            }
+        }
+        for(DijkstraNode<Coordinates> plot : gardenPlots){
+            if(possibleCoordinates.contains(plot.getValue())){
+                trimmed.add(plot);
+            }
+        }
+        return trimmed;
+    }
+
 
     private Coordinates findStart(List<String> input) {
         for(int y=0; y<input.size(); y++){
