@@ -1,11 +1,10 @@
 package ca.arctechlabs.aoc.common.utilities;
 
 import ca.arctechlabs.aoc.common.models.Coordinates;
+import ca.arctechlabs.aoc.common.models.DijkstraNode;
 
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Utils {
@@ -120,5 +119,36 @@ public class Utils {
 
         BigInteger abs = pSum.subtract(nSum).abs();
         return abs.divide(BigInteger.valueOf(2));
+    }
+
+    public static <T> List<DijkstraNode<T>> dijkstraDistancesFromStart(DijkstraNode<T> start, List<DijkstraNode<T>> allNodes){
+        //Set startNode to 0 distance
+        start.setShortestDistanceFromStart(0);
+
+        //Created unvisitedNodeList
+        List<DijkstraNode<T>> unvisited = new ArrayList<>(allNodes);
+        List<DijkstraNode<T>> visited = new ArrayList<>();
+
+        DijkstraNode<T> current;
+        while(!unvisited.isEmpty()){
+            current = unvisited.stream().min(Comparator.comparingInt(DijkstraNode::getShortestDistanceFromStart)).orElseThrow();
+            unvisited.remove(current);
+            visited.add(current);
+
+            Map<?,Integer> neighbours = current.getDistanceToNeighbours();
+            for(Map.Entry<?, Integer> entry : neighbours.entrySet()){
+                if(visited.stream().anyMatch(n -> n.equals(entry.getKey()))){
+                    continue;
+                }
+                DijkstraNode<T> neighbour = unvisited.stream().filter(n -> n.equals(entry.getKey())).findFirst().orElseThrow();
+
+                int newDistance = current.getShortestDistanceFromStart() + neighbours.get(entry.getKey());
+                if(newDistance < neighbour.getShortestDistanceFromStart()){
+                    neighbour.setShortestDistanceFromStart(newDistance);
+                    neighbour.setPreviousVertex(current);
+                }
+            }
+        }
+        return visited;
     }
 }
