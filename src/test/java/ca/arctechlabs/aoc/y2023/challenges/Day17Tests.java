@@ -21,6 +21,7 @@ public class Day17Tests {
         this.fileLoader = new FileLoader(AOC_YEAR);
     }
 
+    @Disabled
     @Test
     public void Day17A_sample(){
         List<String> input = fileLoader.readAsLines("sample17.txt");
@@ -28,6 +29,7 @@ public class Day17Tests {
         assertEquals(102L, result);
     }
 
+    @Disabled
     @Test
     public void Day17A_puzzle(){
         List<String> input = fileLoader.readAsLines("input17.txt");

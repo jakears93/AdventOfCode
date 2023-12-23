@@ -24,9 +24,9 @@ public class Day21 {
         List<DijkstraNode<Coordinates>> shortestPathsFromStart = Utils.dijkstraDistancesFromStart(start, trimmedGardenPlots);
         int check = steps%2;
         return shortestPathsFromStart.stream()
-                .filter(node -> node.getShortestDistanceFromStart() <= steps)
-                .filter(node -> node.getShortestDistanceFromStart() >=0)
-                .filter(node -> node.getShortestDistanceFromStart() % 2 == check)
+                .filter(node -> node.getDistance() <= steps)
+                .filter(node -> node.getDistance() >=0)
+                .filter(node -> node.getDistance() % 2 == check)
                 .count();
     }
 

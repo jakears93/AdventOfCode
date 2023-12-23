@@ -128,7 +128,7 @@ public class Utils {
     }
     public static <T> List<DijkstraNode<T>> dijkstraDistancesFromStart(DijkstraNode<T> start, List<DijkstraNode<T>> allNodes){
         //Set startNode to 0 distance
-        start.setShortestDistanceFromStart(0);
+        start.setDistance(0);
 
         //Created unvisitedNodeList
         List<DijkstraNode<T>> unvisited = new ArrayList<>(allNodes);
@@ -136,7 +136,7 @@ public class Utils {
 
         DijkstraNode<T> current;
         while(!unvisited.isEmpty()){
-            current = unvisited.stream().min(Comparator.comparingInt(DijkstraNode::getShortestDistanceFromStart)).orElseThrow();
+            current = unvisited.stream().min(Comparator.comparingInt(DijkstraNode::getDistance)).orElseThrow();
             unvisited.remove(current);
             visited.add(current);
 
@@ -147,9 +147,9 @@ public class Utils {
                 }
                 DijkstraNode<T> neighbour = unvisited.stream().filter(n -> n.equals(entry.getKey())).findFirst().orElseThrow();
 
-                int newDistance = current.getShortestDistanceFromStart() + neighbours.get(entry.getKey());
-                if(newDistance < neighbour.getShortestDistanceFromStart()){
-                    neighbour.setShortestDistanceFromStart(newDistance);
+                int newDistance = current.getDistance() + neighbours.get(entry.getKey());
+                if(newDistance < neighbour.getDistance()){
+                    neighbour.setDistance(newDistance);
                     neighbour.setPreviousVertex(current);
                 }
             }

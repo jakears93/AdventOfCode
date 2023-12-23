@@ -8,7 +8,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class UtilsTests {
+public class DijkstraTests {
     @Test
     public void testDijkstraDistanceList_UsingValue(){
         DijkstraNode<String> a = new DijkstraNode<>("A");
@@ -37,26 +37,25 @@ public class UtilsTests {
         e.addNeighbour(d, 1);
 
         List<DijkstraNode<String>> result = Utils.dijkstraDistancesFromStart(a.getValue(), List.of(a,b,c,d,e));
-        System.out.println("result = " + result);
         for(DijkstraNode<String> node : result){
             if(node.getValue().equals("A")){
-                assertEquals(0, node.getShortestDistanceFromStart());
+                assertEquals(0, node.getDistance());
                 assertNull(node.getPreviousVertex());
             }
             else if(node.getValue().equals("B")){
-                assertEquals(3, node.getShortestDistanceFromStart());
+                assertEquals(3, node.getDistance());
                 assertEquals(d, node.getPreviousVertex());
             }
             else if(node.getValue().equals("C")){
-                assertEquals(7, node.getShortestDistanceFromStart());
+                assertEquals(7, node.getDistance());
                 assertEquals(e, node.getPreviousVertex());
             }
             else if(node.getValue().equals("D")){
-                assertEquals(1, node.getShortestDistanceFromStart());
+                assertEquals(1, node.getDistance());
                 assertEquals(a, node.getPreviousVertex());
             }
             else if(node.getValue().equals("E")){
-                assertEquals(2, node.getShortestDistanceFromStart());
+                assertEquals(2, node.getDistance());
                 assertEquals(d, node.getPreviousVertex());
             }
         }
@@ -90,26 +89,25 @@ public class UtilsTests {
         e.addNeighbour(d, 1);
 
         List<DijkstraNode<String>> result = Utils.dijkstraDistancesFromStart(a, List.of(a,b,c,d,e));
-        System.out.println("result = " + result);
         for(DijkstraNode<String> node : result){
             if(node.getValue().equals("A")){
-                assertEquals(0, node.getShortestDistanceFromStart());
+                assertEquals(0, node.getDistance());
                 assertNull(node.getPreviousVertex());
             }
             else if(node.getValue().equals("B")){
-                assertEquals(3, node.getShortestDistanceFromStart());
+                assertEquals(3, node.getDistance());
                 assertEquals(d, node.getPreviousVertex());
             }
             else if(node.getValue().equals("C")){
-                assertEquals(7, node.getShortestDistanceFromStart());
+                assertEquals(7, node.getDistance());
                 assertEquals(e, node.getPreviousVertex());
             }
             else if(node.getValue().equals("D")){
-                assertEquals(1, node.getShortestDistanceFromStart());
+                assertEquals(1, node.getDistance());
                 assertEquals(a, node.getPreviousVertex());
             }
             else if(node.getValue().equals("E")){
-                assertEquals(2, node.getShortestDistanceFromStart());
+                assertEquals(2, node.getDistance());
                 assertEquals(d, node.getPreviousVertex());
             }
         }

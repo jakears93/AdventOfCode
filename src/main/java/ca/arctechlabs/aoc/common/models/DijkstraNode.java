@@ -1,52 +1,27 @@
 package ca.arctechlabs.aoc.common.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class DijkstraNode<T> {
-    private final T value;
-    private int shortestDistanceFromStart;
+@Getter
+public class DijkstraNode<T> extends GraphNode<T> {
+    @Setter
     private DijkstraNode<T> previousVertex;
-    private Map<DijkstraNode<T>, Integer> distanceToNeighbours;
+    private final Map<DijkstraNode<T>, Integer> distanceToNeighbours;
 
     public DijkstraNode(T value) {
-        this.value = value;
+        super(value);
         this.previousVertex = null;
-        this.shortestDistanceFromStart = Integer.MAX_VALUE;
+        this.distance = Integer.MAX_VALUE;
         this.distanceToNeighbours = new HashMap<>();
-    }
-
-    public Map<DijkstraNode<T>, Integer> getDistanceToNeighbours() {
-        return distanceToNeighbours;
-    }
-
-    public void setDistanceToNeighbours(Map<DijkstraNode<T>, Integer> distanceToNeighbours) {
-        this.distanceToNeighbours = distanceToNeighbours;
     }
 
     public void addNeighbour(DijkstraNode<T> neighbour, Integer distance){
         this.distanceToNeighbours.put(neighbour, distance);
-    }
-
-    public T getValue() {
-        return value;
-    }
-
-    public int getShortestDistanceFromStart() {
-        return shortestDistanceFromStart;
-    }
-
-    public void setShortestDistanceFromStart(int shortestDistanceFromStart) {
-        this.shortestDistanceFromStart = shortestDistanceFromStart;
-    }
-
-    public DijkstraNode<T> getPreviousVertex() {
-        return previousVertex;
-    }
-
-    public void setPreviousVertex(DijkstraNode<T> previousVertex) {
-        this.previousVertex = previousVertex;
     }
 
     @Override
@@ -58,15 +33,10 @@ public class DijkstraNode<T> {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(value);
-    }
-
-    @Override
     public String toString() {
         return "DijkstraNode{" +
                 "value=" + value +
-                ", shortestDistanceFromStart=" + shortestDistanceFromStart +
+                ", shortestDistanceFromStart=" + distance +
                 ", previousVertex=" + previousVertex +
                 "}";
     }

@@ -20,7 +20,7 @@ public class Day17 {
         return shortestPathsFromStart.stream()
                 .filter(node -> node.equals(end))
                 .findFirst()
-                .map(DijkstraNode::getShortestDistanceFromStart)
+                .map(DijkstraNode::getDistance)
                 .orElseThrow();
     }
 
